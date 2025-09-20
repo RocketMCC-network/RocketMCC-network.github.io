@@ -42,7 +42,7 @@ h1 {
   margin-bottom: 30px;
 }
 .section {
-  background: rgba(20,0,0,0.4); /* transparent */
+  background: rgba(20,0,0,0.4);
   border: 2px solid #ff0000;
   border-radius: 10px;
   padding: 15px 30px;
@@ -51,7 +51,7 @@ h1 {
   color: #ff0000;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(5px); /* optional for readability */
+  backdrop-filter: blur(5px);
 }
 .section:hover {
   background: rgba(255,0,0,0.2);
@@ -67,7 +67,7 @@ h1 {
 /* Client boxes */
 .clientBox, .serverBox {
   display: inline-block;
-  background: rgba(30,0,0,0.4); /* transparent */
+  background: rgba(30,0,0,0.4);
   border: 2px solid #ff0000;
   border-radius: 10px;
   padding: 20px;
@@ -87,7 +87,7 @@ h1 {
   padding: 8px 15px;
   border: none;
   border-radius: 5px;
-  background: rgba(255,0,0,0.8); /* partially transparent */
+  background: rgba(255,0,0,0.8);
   color: #fff;
   cursor: pointer;
   font-weight: bold;
@@ -200,9 +200,8 @@ sections.forEach(section=>{
     section.classList.add('active');
 
     if(section.id === "forumBtn"){
-      // Open forum in new tab
       window.open("https://eaglercraftarchive.freeflarum.com", "_blank");
-      return; // don't change mainContent
+      return;
     }
 
     loadSection(section.id);
@@ -211,7 +210,7 @@ sections.forEach(section=>{
 
 // Clients
 const clients = [
-  {name: "Astra Client", url:"https://astraclient.com/play/js/18"},
+  {name: "Astra Client", url:"https://astraclient.com/play/js/18/"},
   {name: "Tuff Client", url:"https://example.com/tuff"},
   {name: "Pixel Client", url:"https://example.com/pixel"},
   {name: "Resent Client", url:"https://example.com/resent"}
@@ -220,9 +219,10 @@ const clients = [
 // Servers
 const servers = [
   {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
-  {name:"ArchMC", ip:"wss://mc.arch.lol"},
   {name:"WebMC", ip:"wss://play.webmc.fun"},
+  {name:"ArchMC", ip:"wss://mc.arch.lol"},
   {name:"NexoX", ip:"wss://nexo-app.net"}
+  {name:"VoidsentMC", ip:"wss://mc.voidsent.net"}
 ];
 
 function loadSection(id){
@@ -245,10 +245,29 @@ function loadSection(id){
   }
 }
 
-// Client launch and copy IP
+// Launch client in about:blank popup with iframe
 function launchClient(url){
-  window.open(url,"_blank","width=800,height=600");
+  const win = window.open("about:blank", "_blank", "width=800,height=600");
+  setTimeout(()=>{
+    win.document.write(`
+      <html>
+      <head>
+        <title>Eaglercraft Client</title>
+        <style>
+          html, body { margin:0; padding:0; height:100%; overflow:hidden; }
+          iframe { width:100%; height:100%; border:none; }
+        </style>
+      </head>
+      <body>
+        <iframe src="${url}"></iframe>
+      </body>
+      </html>
+    `);
+    win.document.close();
+  }, 50);
 }
+
+// Copy server IP
 function copyIP(ip){
   navigator.clipboard.writeText(ip);
   alert(`Copied IP: ${ip}`);
