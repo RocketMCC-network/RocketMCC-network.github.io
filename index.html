@@ -190,90 +190,99 @@ window.addEventListener('resize', ()=>{
 initNodes();
 animate();
 
-// Sections and content
-const sections = document.querySelectorAll('.section');
-const mainContent = document.getElementById('mainContent');
+// Main content setup
+document.addEventListener("DOMContentLoaded", () => {
 
-sections.forEach(section=>{
-  section.addEventListener('click', ()=>{
-    sections.forEach(s=>s.classList.remove('active'));
-    section.classList.add('active');
+  const sections = document.querySelectorAll('.section');
+  const mainContent = document.getElementById('mainContent');
 
-    if(section.id === "forumBtn"){
-      window.open("https://eaglercraftarchive.freeflarum.com", "_blank");
-      return;
-    }
+  // Clients list
+  const clients = [
+    {name: "Astra Client", url:"https://example.com/astra"},
+    {name: "Tuff Client", url:"https://example.com/tuff"},
+    {name: "Pixel Client", url:"https://example.com/pixel"},
+    {name: "Resent Client", url:"https://example.com/resent"}
+  ];
 
-    loadSection(section.id);
+  // Servers list
+  const servers = [
+    {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
+    {name:"WebMC", ip:"wss://play.webmc.fun"},
+    {name:"NexoX", ip:"wss://nexo-app.net"},
+    {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
+    {name:"noBnoT Anarchy", ip:"wss://eagler.noBoT.org"} // added server
+  ];
+
+  // Load sections
+  sections.forEach(section=>{
+    section.addEventListener('click', ()=>{
+      sections.forEach(s=>s.classList.remove('active'));
+      section.classList.add('active');
+
+      if(section.id === "forumBtn"){
+        window.open("https://eaglercraftarchive.freeflarum.com", "_blank");
+        return;
+      }
+
+      loadSection(section.id);
+    });
   });
+
+  function loadSection(id){
+    mainContent.innerHTML="";
+    if(id==="clientsBtn"){
+      clients.forEach(client=>{
+        const box = document.createElement('div');
+        box.className="clientBox";
+        box.innerHTML=`<div>${client.name}</div><button type="button">Launch</button>`;
+        const btn = box.querySelector("button");
+        btn.addEventListener("click", ()=>launchClient(client.url));
+        mainContent.appendChild(box);
+      });
+    }
+    else if(id==="serversBtn"){
+      servers.forEach(server=>{
+        const box = document.createElement('div');
+        box.className="serverBox";
+        box.innerHTML=`<div>${server.name}</div><div>${server.ip} <button type="button">Copy</button></div>`;
+        const btn = box.querySelector("button");
+        btn.addEventListener("click", ()=>copyIP(server.ip));
+        mainContent.appendChild(box);
+      });
+    }
+  }
+
+  // Launch client in about:blank popup with iframe
+  function launchClient(url){
+    const win = window.open("about:blank", "_blank", "width=800,height=600");
+    setTimeout(()=>{
+      win.document.write(`
+        <html>
+        <head>
+          <title>Eaglercraft Client</title>
+          <style>
+            html, body { margin:0; padding:0; height:100%; overflow:hidden; }
+            iframe { width:100%; height:100%; border:none; }
+          </style>
+        </head>
+        <body>
+          <iframe src="${url}"></iframe>
+        </body>
+        </html>
+      `);
+      win.document.close();
+    }, 50);
+  }
+
+  // Copy server IP
+  function copyIP(ip){
+    navigator.clipboard.writeText(ip);
+    alert(`Copied IP: ${ip}`);
+  }
+
+  // Load default section
+  loadSection("clientsBtn");
 });
-
-// Clients
-const clients = [
-  {name: "Astra Client", url:"https://example.com/astra"},
-  {name: "Tuff Client", url:"https://example.com/tuff"},
-  {name: "Pixel Client", url:"https://example.com/pixel"},
-  {name: "Resent Client", url:"https://example.com/resent"}
-];
-
-// Servers
-const servers = [
-  {name:"Hyper Network", ip:"play.hyper-network.xyz"},
-  {name:"RedAnarchy", ip:"redanarchy.eaglercraft.net"},
-  {name:"Classic Eagler", ip:"classic.eaglercraft.com"},
-  {name:"PixelCraft", ip:"pixelcraft.eagler.xyz"}
-];
-
-function loadSection(id){
-  mainContent.innerHTML="";
-  if(id==="clientsBtn"){
-    clients.forEach(client=>{
-      const box = document.createElement('div');
-      box.className="clientBox";
-      box.innerHTML=`<div>${client.name}</div><button onclick="launchClient('${client.url}')">Launch</button>`;
-      mainContent.appendChild(box);
-    });
-  }
-  else if(id==="serversBtn"){
-    servers.forEach(server=>{
-      const box = document.createElement('div');
-      box.className="serverBox";
-      box.innerHTML=`<div>${server.name}</div><div>${server.ip} <button onclick="copyIP('${server.ip}')">Copy</button></div>`;
-      mainContent.appendChild(box);
-    });
-  }
-}
-
-// Launch client in about:blank popup with iframe
-function launchClient(url){
-  const win = window.open("about:blank", "_blank", "width=800,height=600");
-  setTimeout(()=>{
-    win.document.write(`
-      <html>
-      <head>
-        <title>Eaglercraft Client</title>
-        <style>
-          html, body { margin:0; padding:0; height:100%; overflow:hidden; }
-          iframe { width:100%; height:100%; border:none; }
-        </style>
-      </head>
-      <body>
-        <iframe src="${url}"></iframe>
-      </body>
-      </html>
-    `);
-    win.document.close();
-  }, 50);
-}
-
-// Copy server IP
-function copyIP(ip){
-  navigator.clipboard.writeText(ip);
-  alert(`Copied IP: ${ip}`);
-}
-
-// Load default Clients
-loadSection("clientsBtn");
 </script>
 
 </body>
