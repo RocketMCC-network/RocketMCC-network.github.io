@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Red Hyper Network</title>
+<title>RocketMCC</title>
 <style>
 body, html {
   margin: 0;
@@ -51,7 +51,7 @@ h1 {
   color: #ff0000;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(5px); /* optional for better readability */
+  backdrop-filter: blur(5px); /* optional for readability */
 }
 .section:hover {
   background: rgba(255,0,0,0.2);
@@ -75,7 +75,7 @@ h1 {
   width: 180px;
   transition: all 0.3s ease;
   cursor: pointer;
-  backdrop-filter: blur(5px); /* blur background behind */
+  backdrop-filter: blur(5px);
 }
 .clientBox:hover, .serverBox:hover {
   background: rgba(255,0,0,0.15);
@@ -108,16 +108,16 @@ h1 {
 <canvas id="background"></canvas>
 
 <div class="content">
-  <h1>Red Hyper Network</h1>
+  <h1>RocketMCC</h1>
 
   <div class="sections">
     <div class="section active" id="clientsBtn">Clients</div>
     <div class="section" id="serversBtn">Servers</div>
-    <div class="section" id="resourcesBtn">Resources</div>
+    <div class="section" id="forumBtn">Forum</div>
   </div>
 
   <div id="mainContent">
-    <!-- Content will load here -->
+    <!-- Content loads here -->
   </div>
 </div>
 
@@ -190,7 +190,7 @@ window.addEventListener('resize', ()=>{
 initNodes();
 animate();
 
-// Section switching
+// Sections and content
 const sections = document.querySelectorAll('.section');
 const mainContent = document.getElementById('mainContent');
 
@@ -198,6 +198,13 @@ sections.forEach(section=>{
   section.addEventListener('click', ()=>{
     sections.forEach(s=>s.classList.remove('active'));
     section.classList.add('active');
+
+    if(section.id === "forumBtn"){
+      // Open forum in new tab
+      window.open("https://eaglercraftarchive.freeflarum.com", "_blank");
+      return; // don't change mainContent
+    }
+
     loadSection(section.id);
   });
 });
@@ -212,10 +219,10 @@ const clients = [
 
 // Servers
 const servers = [
-  {name:"Hyper Network", ip:"play.hyper-network.xyz"},
-  {name:"RedAnarchy", ip:"redanarchy.eaglercraft.net"},
-  {name:"Classic Eagler", ip:"classic.eaglercraft.com"},
-  {name:"PixelCraft", ip:"pixelcraft.eagler.xyz"}
+  {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
+  {name:"ArchMC", ip:"wss://mc.arch.lol"},
+  {name:"WebMC", ip:"wss://play.webmc.fun"},
+  {name:"NexoX", ip:"wss://nexo-app.net"}
 ];
 
 function loadSection(id){
@@ -235,9 +242,6 @@ function loadSection(id){
       box.innerHTML=`<div>${server.name}</div><div>${server.ip} <button onclick="copyIP('${server.ip}')">Copy</button></div>`;
       mainContent.appendChild(box);
     });
-  }
-  else if(id==="resourcesBtn"){
-    mainContent.innerHTML="<p>Resources coming soon...</p>";
   }
 }
 
