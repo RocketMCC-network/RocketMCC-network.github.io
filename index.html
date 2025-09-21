@@ -3,248 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RocketMCC Launcher</title>
+<title>RocketMCC</title>
 <style>
 body, html {
   margin: 0;
   padding: 0;
-  overflow: hidden;
   font-family: Arial, sans-serif;
-  background-color: #0d0d0d;
+  overflow: hidden;
+  background: #0d0d0d;
+  color: #fff;
 }
-canvas {
-  display: block;
+#background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
+.content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 50px;
+}
+h1 {
+  color: #ff0000;
+  font-size: 48px;
+  margin-bottom: 30px;
+}
+.sections {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.section {
+  background: rgba(20,0,0,0.6);
+  border: 2px solid #ff0000;
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+.section:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 25px rgba(255,0,0,0.7); transform: scale(1.05);}
+.section.active { background: rgba(255,0,0,0.25); box-shadow: 0 0 30px rgba(255,0,0,0.8); transform: scale(1.05); }
+
+.clientBox, .serverBox {
+  display: inline-block;
+  background: rgba(20,0,0,0.5);
+  border: 2px solid #ff0000;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  width: 180px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  position: relative;
+  z-index: 1;
+}
+.clientBox:hover, .serverBox:hover { background: rgba(255,0,0,0.2); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05);}
+.clientBox button, .serverBox button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255,0,0,0.8);
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9);}
+.serverBox { width: 250px; display:flex; justify-content: space-between; align-items:center;}
 </style>
 </head>
 <body>
 
-<canvas id="launcherCanvas"></canvas>
+<canvas id="background"></canvas>
+
+<div class="content">
+  <h1>RocketMCC</h1>
+
+  <div class="sections">
+    <div class="section active" id="clientsBtn">Clients</div>
+    <div class="section" id="serversBtn">Servers</div>
+    <div class="section" id="forumBtn">Forum</div>
+  </div>
+
+  <div id="mainContent"></div>
+</div>
 
 <script>
-const canvas = document.getElementById('launcherCanvas');
+// Background animation
+const canvas = document.getElementById('background');
 const ctx = canvas.getContext('2d');
-
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
-
-// Node animation
 let nodes = [];
 const NODE_COUNT = 80;
 const MAX_DISTANCE = 150;
 
 class Node {
-  constructor() {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = (Math.random() - 0.5) * 0.5;
-  }
-  update() {
-    this.x += this.vx; this.y += this.vy;
-    if(this.x<0||this.x>width) this.vx*=-1;
-    if(this.y<0||this.y>height) this.vy*=-1;
-  }
-  draw() {
-    ctx.fillStyle = '#ff0000';
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 3, 0, Math.PI*2);
-    ctx.fill();
-  }
+  constructor() { this.x=Math.random()*width; this.y=Math.random()*height; this.vx=(Math.random()-0.5)*0.5; this.vy=(Math.random()-0.5)*0.5;}
+  update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>width) this.vx*=-1; if(this.y<0||this.y>height) this.vy*=-1;}
+  draw() { ctx.fillStyle="#ff0000"; ctx.beginPath(); ctx.arc(this.x,this.y,3,0,Math.PI*2); ctx.fill();}
 }
 
-function initNodes() {
-  nodes = [];
-  for(let i=0;i<NODE_COUNT;i++) nodes.push(new Node());
-}
-
-// Sections
-const sections = [
-  {name:"Clients"},
-  {name:"Servers"},
-  {name:"Forum"}
-];
-let activeSection = 0;
-
-// Buttons
-let buttons = [];
-
-// Full client list
-const clients = [
-  {name: "Astra Client", url:"https://astraclient.com/play/js/18"},
-  {name: "Tuff Client", url:"https://tuff.speedslicer.dev/js/index.html"},
-  {name: "Pixel Client", url:"https://example.com/pixel"},
-  {name: "Resent Client", url:"https://example.com/resent"}
-];
-
-// Full server list
-const servers = [
-  {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
-  {name:"WebMC", ip:"wss://play.webmc.fun"},
-  {name:"NexoX", ip:"wss://nexo-app.net"},
-  {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
-  {name:"noBnoT Anarchy", ip:"wss://eagler.noBoT.org"}
-];
-
-let mouse = {x:0, y:0};
-canvas.addEventListener('mousemove', e=>{
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-});
-canvas.addEventListener('click', e=>{
-  // Sections
-  sections.forEach((sec,i)=>{
-    if(mouse.x>=i*150+width/2-225 && mouse.x<=i*150+width/2-225+140 &&
-       mouse.y>=50 && mouse.y<=90){
-         activeSection=i;
-         createButtons();
-         if(activeSection===2) window.open("https://eaglercraftarchive.freeflarum.com", "_blank");
-       }
-  });
-  // Buttons
-  buttons.forEach(btn=>{
-    if(mouse.x>=btn.x && mouse.x<=btn.x+btn.width &&
-       mouse.y>=btn.y && mouse.y<=btn.y+btn.height){
-         btn.onClick();
-       }
-  });
-});
-
-// Preload clients
-clients.forEach(c=>{
-  const iframe = document.createElement('iframe');
-  iframe.src = c.url;
-  iframe.style.display='none';
-  document.body.appendChild(iframe);
-});
-
-function createButtons() {
-  buttons = [];
-  let startY = 150;
-  if(activeSection===0){ // Clients
-    clients.forEach((c,i)=>{
-      buttons.push({
-        x: width/2-100,
-        y: startY + i*70,
-        width: 200,
-        height: 50,
-        text: c.name,
-        onClick: ()=>launchClient(c.url)
-      });
-    });
-  } else if(activeSection===1){ // Servers
-    servers.forEach((s,i)=>{
-      buttons.push({
-        x: width/2-100,
-        y: startY + i*70,
-        width: 200,
-        height: 50,
-        text: s.name,
-        onClick: ()=>copyIP(s.ip)
-      });
-    });
-  }
-}
-
-function launchClient(url){
-  const win = window.open("about:blank", "_blank", "width=800,height=600");
-  setTimeout(()=>{
-    win.document.write(`
-      <html>
-      <head>
-        <title>Eaglercraft Client</title>
-        <style>html,body{margin:0;padding:0;height:100%;overflow:hidden;}iframe{width:100%;height:100%;border:none;}</style>
-      </head>
-      <body>
-        <iframe src="${url}"></iframe>
-      </body>
-      </html>
-    `);
-    win.document.close();
-  },50);
-}
-
-function copyIP(ip){
-  navigator.clipboard.writeText(ip);
-  alert("Copied IP: " + ip);
-}
-
-function drawSections() {
-  sections.forEach((sec,i)=>{
-    let x = i*150+width/2-225;
-    let y = 50;
-    let w = 140, h = 40;
-    let isActive = i===activeSection;
-    let isHover = mouse.x>=x && mouse.x<=x+w && mouse.y>=y && mouse.y<=y+h;
-    ctx.fillStyle = isActive ? 'rgba(255,0,0,0.3)' : isHover ? 'rgba(255,0,0,0.2)' : 'rgba(255,0,0,0.1)';
-    ctx.fillRect(x,y,w,h);
-    ctx.strokeStyle='#ff0000';
-    ctx.lineWidth=2;
-    ctx.strokeRect(x,y,w,h);
-    ctx.fillStyle='#fff';
-    ctx.font='18px Arial';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillText(sec.name, x+w/2, y+h/2);
-  });
-}
-
-function drawButtons() {
-  buttons.forEach(btn=>{
-    let isHover = mouse.x>=btn.x && mouse.x<=btn.x+btn.width &&
-                  mouse.y>=btn.y && mouse.y<=btn.y+btn.height;
-    ctx.fillStyle = isHover ? 'rgba(255,0,0,0.3)' : 'rgba(255,0,0,0.1)';
-    ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
-    ctx.strokeStyle='#ff0000';
-    ctx.lineWidth=2;
-    ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
-
-    ctx.fillStyle='#fff';
-    ctx.font='18px Arial';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillText(btn.text, btn.x+btn.width/2, btn.y+btn.height/2);
-  });
-}
-
-function drawLines() {
+function initNodes(){ nodes=[]; for(let i=0;i<NODE_COUNT;i++) nodes.push(new Node()); }
+function drawLines(){
   for(let i=0;i<nodes.length;i++){
     for(let j=i+1;j<nodes.length;j++){
-      let dx = nodes[i].x-nodes[j].x;
-      let dy = nodes[i].y-nodes[j].y;
-      let dist = Math.sqrt(dx*dx+dy*dy);
-      if(dist<MAX_DISTANCE){
-        ctx.strokeStyle = `rgba(255,0,0,${1-dist/MAX_DISTANCE})`;
-        ctx.lineWidth=1;
-        ctx.beginPath();
-        ctx.moveTo(nodes[i].x,nodes[i].y);
-        ctx.lineTo(nodes[j].x,nodes[j].y);
-        ctx.stroke();
-      }
+      let dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+      let dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<MAX_DISTANCE){ ctx.strokeStyle=`rgba(255,0,0,${1-dist/MAX_DISTANCE})`; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke();}
     }
   }
 }
+function animate(){ ctx.clearRect(0,0,width,height); nodes.forEach(n=>{n.update(); n.draw();}); drawLines(); requestAnimationFrame(animate);}
+window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initNodes();});
+initNodes(); animate();
 
-function animate() {
-  ctx.clearRect(0,0,width,height);
-  nodes.forEach(n=>{n.update(); n.draw();});
-  drawLines();
-  drawSections();
-  drawButtons();
-  requestAnimationFrame(animate);
-}
+// Launcher content
+document.addEventListener("DOMContentLoaded", ()=>{
+  const sections = document.querySelectorAll('.section');
+  const mainContent = document.getElementById('mainContent');
 
-window.addEventListener('resize', ()=>{
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-  initNodes();
-  createButtons();
+  const clients=[
+    {name:"Astra Client", url:"https://astraclient.com/play/js/18"},
+    {name:"Tuff Client", url:"https://tuff.speedslicer.dev/js/index.html"},
+    {name:"Pixel Client", url:"https://example.com/pixel"},
+    {name:"Resent Client", url:"https://example.com/resent"}
+  ];
+
+  const servers=[
+    {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
+    {name:"WebMC", ip:"wss://play.webmc.fun"},
+    {name:"NexoX", ip:"wss://nexo-app.net"},
+    {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
+    {name:"noBnoT Anarchy", ip:"wss://eagler.noBoT.org"}
+  ];
+
+  sections.forEach(section=>{
+    section.addEventListener('click', ()=>{
+      sections.forEach(s=>s.classList.remove('active'));
+      section.classList.add('active');
+      if(section.id==="forumBtn"){ window.open("https://eaglercraftarchive.freeflarum.com","_blank"); return;}
+      loadSection(section.id);
+    });
+  });
+
+  function loadSection(id){
+    mainContent.innerHTML="";
+    if(id==="clientsBtn"){
+      clients.forEach(c=>{
+        const box=document.createElement('div'); box.className="clientBox";
+        box.innerHTML=`<div>${c.name}</div><button>Launch</button>`;
+        box.querySelector("button").addEventListener("click",()=>launchClient(c.url));
+        mainContent.appendChild(box);
+      });
+    } else if(id==="serversBtn"){
+      servers.forEach(s=>{
+        const box=document.createElement('div'); box.className="serverBox";
+        box.innerHTML=`<div>${s.name}</div><div>${s.ip} <button>Copy</button></div>`;
+        box.querySelector("button").addEventListener("click",()=>copyIP(s.ip));
+        mainContent.appendChild(box);
+      });
+    }
+  }
+
+  function launchClient(url){
+    const win=window.open('about:blank','_blank','width=800,height=600');
+    // Show visible splash so user sees about:blank
+    win.document.write(`
+      <html>
+        <head><title>RocketMCC</title></head>
+        <body style="background:#0d0d0d;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial;font-size:24px;">
+          Loading client...
+          <script>
+            setTimeout(()=>{ window.location.href="${url}"; }, 500);
+          <\/script>
+        </body>
+      </html>
+    `);
+    win.document.close();
+  }
+
+  function copyIP(ip){ navigator.clipboard.writeText(ip); alert("Copied IP: "+ip);}
+  loadSection("clientsBtn");
 });
-
-initNodes();
-createButtons();
-animate();
 </script>
-
 </body>
 </html>
