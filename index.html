@@ -1,221 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RocketMCC</title>
-<style>
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-  background: #0d0d0d;
-  color: #fff;
-}
-#background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-.content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 50px;
-}
-h1 {
-  color: #ff0000;
-  font-size: 48px;
-  margin-bottom: 30px;
-}
-.sections {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-.section {
-  background: rgba(20,0,0,0.6);
-  border: 2px solid #ff0000;
-  border-radius: 10px;
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff0000;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-}
-.section:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 25px rgba(255,0,0,0.7); transform: scale(1.05);}
-.section.active { background: rgba(255,0,0,0.25); box-shadow: 0 0 30px rgba(255,0,0,0.8); transform: scale(1.05); }
-
-.listWrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
-.clientBox, .serverBox {
-  background: rgba(20,0,0,0.5);
-  border: 2px solid #ff0000;
-  border-radius: 10px;
-  padding: 20px;
-  width: 220px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  backdrop-filter: blur(5px);
-  text-align: center;
-}
-.clientBox:hover, .serverBox:hover { background: rgba(255,0,0,0.2); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05);}
-.clientBox button, .serverBox button {
-  margin-top: 10px;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  background: rgba(255,0,0,0.8);
-  color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-}
-.clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9);}
-</style>
-</head>
-<body>
-
-<canvas id="background"></canvas>
-
-<div class="content">
-  <h1>RocketMCC</h1>
-
-  <div class="sections">
-    <div class="section active" id="clientsBtn">Clients</div>
-    <div class="section" id="serversBtn">Servers</div>
-    <div class="section" id="forumBtn">Forum</div>
-  </div>
-
-  <div id="mainContent"></div>
-</div>
-
+<!-- PWA install logic -->
 <script>
-// Background animation
-const canvas = document.getElementById('background');
-const ctx = canvas.getContext('2d');
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-let nodes = [];
-const NODE_COUNT = 80;
-const MAX_DISTANCE = 150;
+(async ()=>{
+  // Dynamically create and register manifest
+  const manifest = {
+    name: "RocketMCC",
+    short_name: "RocketMCC",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#0d0d0d",
+    theme_color: "#ff0000",
+    icons: [
+      { src: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f680.png", sizes: "72x72", type: "image/png" },
+      { src: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/128x128/1f680.png", sizes: "128x128", type: "image/png" }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+  const manifestURL = URL.createObjectURL(blob);
+  const link = document.createElement("link");
+  link.rel = "manifest";
+  link.href = manifestURL;
+  document.head.appendChild(link);
 
-class Node {
-  constructor() { this.x=Math.random()*width; this.y=Math.random()*height; this.vx=(Math.random()-0.5)*0.5; this.vy=(Math.random()-0.5)*0.5;}
-  update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>width) this.vx*=-1; if(this.y<0||this.y>height) this.vy*=-1;}
-  draw() { ctx.fillStyle="#ff0000"; ctx.beginPath(); ctx.arc(this.x,this.y,3,0,Math.PI*2); ctx.fill();}
-}
-function initNodes(){ nodes=[]; for(let i=0;i<NODE_COUNT;i++) nodes.push(new Node()); }
-function drawLines(){
-  for(let i=0;i<nodes.length;i++){
-    for(let j=i+1;j<nodes.length;j++){
-      let dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
-      let dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<MAX_DISTANCE){ ctx.strokeStyle=`rgba(255,0,0,${1-dist/MAX_DISTANCE})`; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke();}
-    }
-  }
-}
-function animate(){ ctx.clearRect(0,0,width,height); nodes.forEach(n=>{n.update(); n.draw();}); drawLines(); requestAnimationFrame(animate);}
-window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initNodes();});
-initNodes(); animate();
+  // Create and register service worker inline
+  const swCode = `
+    self.addEventListener('install', e => self.skipWaiting());
+    self.addEventListener('fetch', e => {});
+  `;
+  const swBlob = new Blob([swCode], { type: "text/javascript" });
+  const swURL = URL.createObjectURL(swBlob);
+  if ('serviceWorker' in navigator) await navigator.serviceWorker.register(swURL);
 
-// Launcher content
-document.addEventListener("DOMContentLoaded", ()=>{
-  const sections = document.querySelectorAll('.section');
-  const mainContent = document.getElementById('mainContent');
+  // Install button UI
+  const installBtn = document.createElement("button");
+  installBtn.textContent = "Install RocketMCC";
+  installBtn.style = `
+    position:fixed;bottom:20px;right:20px;padding:12px 20px;
+    background:#ff0000;border:none;border-radius:10px;
+    color:#fff;font-weight:bold;font-size:16px;
+    cursor:pointer;box-shadow:0 0 15px rgba(255,0,0,0.5);
+  `;
+  installBtn.hidden = true;
+  document.body.appendChild(installBtn);
 
-  const clients=[
-    {name:"Astra Client", url:"https://astraclient.com/play/js/18"},
-    {name:"Tuff Client", url:"https://tuff.speedslicer.dev/js/index.html"},
-    {name:"Pixel Client", url:"https://example.com/pixel"},
-    {name:"Resent Client", url:"https://resent4-0.vercel.app"}
-  ];
-
-  // --- 20 Example Servers ---
-  const servers=[
-    {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
-    {name:"WebMC", ip:"wss://play.webmc.fun"},
-    {name:"ArchMC", ip:"wss://mc.arch.lol"},
-    {name:"Jonarchy", ip:"wss://8b4t.org"},
-    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store"},
-    {name:"NexoX", ip:"wss://nexo-app.net"},
-    {name:"AdderallMC", ip:"wss://adderall.ir"},
-    {name:"VanillaMC", ip:"wss://vanillamc.org"},
-    {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
-    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz"},
-    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz"},
-    {name:"Server 12", ip:"wss://server12.example"},
-    {name:"Server 13", ip:"wss://server13.example"},
-    {name:"Server 14", ip:"wss://server14.example"},
-    {name:"Server 15", ip:"wss://server15.example"},
-    {name:"Server 16", ip:"wss://server16.example"},
-    {name:"Server 17", ip:"wss://server17.example"},
-    {name:"Server 18", ip:"wss://server18.example"},
-    {name:"Server 19", ip:"wss://server19.example"},
-    {name:"Server 20", ip:"wss://server20.example"}
-  ];
-
-  sections.forEach(section=>{
-    section.addEventListener('click', ()=>{
-      sections.forEach(s=>s.classList.remove('active'));
-      section.classList.add('active');
-      if(section.id==="forumBtn"){ window.open("https://eaglercraftarchive.freeflarum.com","_blank"); return;}
-      loadSection(section.id);
-    });
+  // Handle install prompt
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.hidden = false;
   });
-
-  function loadSection(id){
-    mainContent.innerHTML="";
-    const wrapper = document.createElement("div");
-    wrapper.className = "listWrapper";
-
-    if(id==="clientsBtn"){
-      clients.forEach(c=>{
-        const box=document.createElement('div'); box.className="clientBox";
-        box.innerHTML=`<div>${c.name}</div><button>Launch</button>`;
-        box.querySelector("button").addEventListener("click",()=>launchClient(c.url));
-        wrapper.appendChild(box);
-      });
-    } else if(id==="serversBtn"){
-      servers.forEach(s=>{
-        const box=document.createElement('div'); box.className="serverBox";
-        box.innerHTML=`<div>${s.name}</div><div>${s.ip}</div><button>Copy</button>`;
-        box.querySelector("button").addEventListener("click",()=>copyIP(s.ip));
-        wrapper.appendChild(box);
-      });
+  installBtn.addEventListener('click', async ()=>{
+    installBtn.hidden = true;
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    } else {
+      alert("Use your browser menu → 'Install App' to add RocketMCC.");
     }
-
-    mainContent.appendChild(wrapper);
-  }
-
-  function launchClient(url){
-    const win=window.open('about:blank','_blank','width=800,height=600');
-    win.document.write(`
-      <html>
-        <head><title>RocketMCC</title></head>
-        <body style="background:#0d0d0d;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial;font-size:24px;">
-          Loading client...
-          <script>
-            setTimeout(()=>{ window.location.href="${url}"; }, 500);
-          <\/script>
-        </body>
-      </html>
-    `);
-    win.document.close();
-  }
-
-  function copyIP(ip){ navigator.clipboard.writeText(ip); alert("Copied IP: "+ip); }
-  loadSection("clientsBtn");
-});
+  });
+})();
 </script>
-</body>
-</html>
