@@ -58,7 +58,7 @@ h1 {
   gap: 15px;
 }
 
-.clientBox, .serverBox {
+.clientBox, .serverBox, .newsBox {   /* ⭐ ADDED newsBox */
   background: rgba(20,0,0,0.5);
   border: 2px solid #ff0000;
   border-radius: 10px;
@@ -69,7 +69,7 @@ h1 {
   backdrop-filter: blur(5px);
   text-align: center;
 }
-.clientBox:hover, .serverBox:hover { background: rgba(255,0,0,0.2); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05);}
+.clientBox:hover, .serverBox:hover, .newsBox:hover { background: rgba(255,0,0,0.2); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05);}
 .clientBox button, .serverBox button {
   margin-top: 10px;
   padding: 8px 15px;
@@ -94,13 +94,16 @@ h1 {
     <div class="section active" id="clientsBtn">Clients</div>
     <div class="section" id="serversBtn">Servers</div>
     <div class="section" id="forumBtn">Forum</div>
+    <div class="section" id="newsBtn">News</div>   <!-- ⭐ ADDED -->
   </div>
 
   <div id="mainContent"></div>
 </div>
 
 <script>
-// Background animation
+// -------------------------
+// BACKGROUND ANIMATION (unchanged)
+// -------------------------
 const canvas = document.getElementById('background');
 const ctx = canvas.getContext('2d');
 let width = canvas.width = window.innerWidth;
@@ -128,7 +131,9 @@ function animate(){ ctx.clearRect(0,0,width,height); nodes.forEach(n=>{n.update(
 window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initNodes();});
 initNodes(); animate();
 
-// Launcher content
+// -------------------------
+// MAIN CONTENT
+// -------------------------
 document.addEventListener("DOMContentLoaded", ()=>{
   const sections = document.querySelectorAll('.section');
   const mainContent = document.getElementById('mainContent');
@@ -140,7 +145,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Resent Client", url:"https://resent4-0.vercel.app"}
   ];
 
-  // --- 20 Example Servers ---
   const servers=[
     {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
     {name:"WebMC", ip:"wss://play.webmc.fun"},
@@ -164,6 +168,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Server 20", ip:"wss://server20.example"}
   ];
 
+  // ⭐ ADDED NEWS LIST
+  const news = [
+    {title:"RocketMCC-Network offical eaglercraft server just launched", text:"The official RocketMCC-Network eaglercraft server is now online more will be added soon eaglercraft IP is RocketMCC.eagler.host"},
+    {title:"New Clients Added", text:"Tuff Client and Resent Client have been updated."},
+    {title:"Server List Updated", text:"More Eaglercraft servers have been added today."}
+  ];
+
   sections.forEach(section=>{
     section.addEventListener('click', ()=>{
       sections.forEach(s=>s.classList.remove('active'));
@@ -185,11 +196,21 @@ document.addEventListener("DOMContentLoaded", ()=>{
         box.querySelector("button").addEventListener("click",()=>launchClient(c.url));
         wrapper.appendChild(box);
       });
-    } else if(id==="serversBtn"){
+    } 
+    else if(id==="serversBtn"){
       servers.forEach(s=>{
         const box=document.createElement('div'); box.className="serverBox";
         box.innerHTML=`<div>${s.name}</div><div>${s.ip}</div><button>Copy</button>`;
         box.querySelector("button").addEventListener("click",()=>copyIP(s.ip));
+        wrapper.appendChild(box);
+      });
+    }
+    // ⭐ NEWS SECTION
+    else if(id==="newsBtn"){
+      news.forEach(n=>{
+        const box=document.createElement('div'); 
+        box.className="newsBox";
+        box.innerHTML=`<h3>${n.title}</h3><p>${n.text}</p>`;
         wrapper.appendChild(box);
       });
     }
@@ -214,6 +235,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
   function copyIP(ip){ navigator.clipboard.writeText(ip); alert("Copied IP: "+ip); }
+
   loadSection("clientsBtn");
 });
 </script>
