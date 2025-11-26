@@ -58,7 +58,7 @@ h1 {
   gap: 15px;
 }
 
-.clientBox, .serverBox, .newsBox {   /* ⭐ ADDED newsBox */
+.clientBox, .serverBox, .newsBox {
   background: rgba(20,0,0,0.5);
   border: 2px solid #ff0000;
   border-radius: 10px;
@@ -94,16 +94,14 @@ h1 {
     <div class="section active" id="clientsBtn">Clients</div>
     <div class="section" id="serversBtn">Servers</div>
     <div class="section" id="forumBtn">Forum</div>
-    <div class="section" id="newsBtn">News</div>   <!-- ⭐ ADDED -->
+    <div class="section" id="newsBtn">News</div>
   </div>
 
   <div id="mainContent"></div>
 </div>
 
 <script>
-// -------------------------
-// BACKGROUND ANIMATION (unchanged)
-// -------------------------
+// BACKGROUND
 const canvas = document.getElementById('background');
 const ctx = canvas.getContext('2d');
 let width = canvas.width = window.innerWidth;
@@ -131,9 +129,8 @@ function animate(){ ctx.clearRect(0,0,width,height); nodes.forEach(n=>{n.update(
 window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initNodes();});
 initNodes(); animate();
 
-// -------------------------
+
 // MAIN CONTENT
-// -------------------------
 document.addEventListener("DOMContentLoaded", ()=>{
   const sections = document.querySelectorAll('.section');
   const mainContent = document.getElementById('mainContent');
@@ -142,7 +139,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Astra Client", url:"https://astraclient.com/play/wasm/18/"},
     {name:"Tuff Client", url:"https://tuff.speedslicer.dev/files/1_1UT3/WASM/"},
     {name:"Pixel Client", url:"https://example.com/pixel"},
-    {name:"Resent Client", url:"https://resent4-0.vercel.app"}
+    {name:"Resent Client", url:"https://resent4-0.vercel.app"},
+    {name:"Shadow Client", url:"https://peytonplayz595.github.io/Shadow-4.0/javascript/"}
   ];
 
   const servers=[
@@ -157,22 +155,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
     {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz"},
     {name:"ExoticMC", ip:"wss://el.exoticmc.xyz"},
-    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host"},
-    {name:"Server 13", ip:"wss://server13.example"},
-    {name:"Server 14", ip:"wss://server14.example"},
-    {name:"Server 15", ip:"wss://server15.example"},
-    {name:"Server 16", ip:"wss://server16.example"},
-    {name:"Server 17", ip:"wss://server17.example"},
-    {name:"Server 18", ip:"wss://server18.example"},
-    {name:"Server 19", ip:"wss://server19.example"},
-    {name:"Server 20", ip:"wss://server20.example"}
+    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host"}
   ];
 
-  // ⭐ ADDED NEWS LIST
   const news = [
-    {title:"RocketMCC-Network offical eaglercraft server is shutdown not sure how long", text:"shutdown"},
-    {title:"Tuff client and Astra Client have been updated to wasm.", text:"Tuff client and Astra Client have been updated to wasm."},
-    {title:"Server List Updated", text:"More Eaglercraft servers have been added today."}
+    {title:"RocketMCC-Network shutdown", text:"shutdown"},
+    {title:"Clients Updated", text:"Tuff and Astra updated to WASM."},
+    {title:"added Shadow Client", text:"added shadow client"}
   ];
 
   sections.forEach(section=>{
@@ -205,7 +194,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
         wrapper.appendChild(box);
       });
     }
-    // ⭐ NEWS SECTION
     else if(id==="newsBtn"){
       news.forEach(n=>{
         const box=document.createElement('div'); 
