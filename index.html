@@ -5,82 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RocketMCC</title>
 <style>
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-  background: #0d0d0d;
-  color: #fff;
-}
-#background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-.content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 50px;
-}
-h1 {
-  color: #ff0000;
-  font-size: 48px;
-  margin-bottom: 30px;
-}
-.sections {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-.section {
-  background: rgba(20,0,0,0.6);
-  border: 2px solid #ff0000;
-  border-radius: 10px;
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff0000;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-}
-.section:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 25px rgba(255,0,0,0.7); transform: scale(1.05);}
-.section.active { background: rgba(255,0,0,0.25); box-shadow: 0 0 30px rgba(255,0,0,0.8); transform: scale(1.05); }
-
-.listWrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
-.clientBox, .serverBox, .newsBox {
-  background: rgba(20,0,0,0.5);
-  border: 2px solid #ff0000;
-  border-radius: 10px;
-  padding: 20px;
-  width: 220px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  backdrop-filter: blur(5px);
-  text-align: center;
-}
+body, html { margin:0; padding:0; font-family:Arial; overflow:hidden; background:#0d0d0d; color:#fff; }
+#background { position:fixed; top:0; left:0; z-index:0; }
+.content { position:relative; z-index:1; text-align:center; padding:50px; }
+h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
+.sections { display:flex; gap:20px; justify-content:center; margin-bottom:30px; }
+.section { background:rgba(20,0,0,0.6); border:2px solid #ff0000; border-radius:10px; padding:15px 30px; font-size:18px; font-weight:bold; color:#ff0000; cursor:pointer; transition:all 0.3s ease; backdrop-filter: blur(5px); }
+.section:hover { background:rgba(255,0,0,0.3); box-shadow:0 0 25px rgba(255,0,0,0.7); transform:scale(1.05); }
+.section.active { background:rgba(255,0,0,0.25); box-shadow:0 0 30px rgba(255,0,0,0.8); transform:scale(1.05); }
+.listWrapper { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
+.clientBox, .serverBox, .newsBox { background: rgba(20,0,0,0.5); border:2px solid #ff0000; border-radius:10px; padding:20px; width:220px; transition: all 0.3s ease; cursor:pointer; backdrop-filter: blur(5px); text-align:center; }
 .clientBox:hover, .serverBox:hover, .newsBox:hover { background: rgba(255,0,0,0.2); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05);}
-.clientBox button, .serverBox button {
-  margin-top: 10px;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  background: rgba(255,0,0,0.8);
-  color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-}
-.clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9);}
+.clientBox button, .serverBox button { margin-top:10px; padding:8px 15px; border:none; border-radius:5px; background: rgba(255,0,0,0.8); color:#fff; cursor:pointer; font-weight:bold; }
+.clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9); }
+
+/* Modal styles */
+#clientModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:10; }
+#clientModalContent { background:#0d0d0d; border:2px solid #ff0000; border-radius:10px; padding:30px; text-align:center; max-width:400px; }
+#clientModalContent h2 { color: #ff0000; margin-bottom: 20px; } /* updated title color */
+#modalButtons button { padding:10px; border:none; border-radius:10px; background:rgba(20,0,0,0.6); color:#ff0000; font-weight:bold; cursor:pointer; font-size:16px; box-shadow:0 0 0 rgba(255,0,0,0); transition:all 0.3s ease; width:100%; margin-top:5px;}
+#modalButtons button:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05); }
+#clientModalContent button.closeBtn { margin-top:20px; padding:10px 20px; border:none; border-radius:5px; background:#ff0000; color:#fff; cursor:pointer; }
+#clientModalContent button.closeBtn:hover { background: rgba(255,85,85,0.9); }
 </style>
 </head>
 <body>
@@ -100,6 +46,15 @@ h1 {
   <div id="mainContent"></div>
 </div>
 
+<!-- Modal for clients -->
+<div id="clientModal">
+  <div id="clientModalContent">
+    <h2>Select Client</h2>
+    <div id="modalButtons"></div>
+    <button class="closeBtn" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
 <script>
 // -------------------- BACKGROUND ANIMATION --------------------
 const canvas = document.getElementById('background');
@@ -114,40 +69,27 @@ class Node {
   constructor() {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 1.0;
-    this.vy = (Math.random() - 0.5) * 1.0;
+    this.vx = (Math.random()-0.5)*1.0;
+    this.vy = (Math.random()-0.5)*1.0;
   }
   update() {
-    // Continuous drift
     this.x += this.vx;
     this.y += this.vy;
-
-    // tiny random motion
-    this.vx += (Math.random() - 0.5) * 0.05;
-    this.vy += (Math.random() - 0.5) * 0.05;
-
-    // limit velocity
+    this.vx += (Math.random()-0.5)*0.05;
+    this.vy += (Math.random()-0.5)*0.05;
     const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
-    if(speed > 1.5){ this.vx = this.vx/speed*1.5; this.vy = this.vy/speed*1.5; }
-
-    // bounce edges
+    if(speed>1.5){ this.vx=this.vx/speed*1.5; this.vy=this.vy/speed*1.5; }
     if(this.x<0){ this.x=0; this.vx*=-1; }
     if(this.x>width){ this.x=width; this.vx*=-1; }
     if(this.y<0){ this.y=0; this.vy*=-1; }
     if(this.y>height){ this.y=height; this.vy*=-1; }
   }
-  draw() {
-    ctx.fillStyle="#ff0000";
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 3, 0, Math.PI*2);
-    ctx.fill();
-  }
+  draw() { ctx.fillStyle="#ff0000"; ctx.beginPath(); ctx.arc(this.x,this.y,3,0,Math.PI*2); ctx.fill(); }
 }
 
 function initNodes(){ nodes=[]; for(let i=0;i<NODE_COUNT;i++) nodes.push(new Node()); }
 initNodes();
 
-// DRAGGING + FLUID EFFECT
 let selectedNode = null;
 canvas.addEventListener("mousedown", e=>{
   const mx=e.clientX, my=e.clientY;
@@ -156,33 +98,28 @@ canvas.addEventListener("mousedown", e=>{
 window.addEventListener("mouseup", ()=>selectedNode=null);
 window.addEventListener("mousemove", e=>{
   if(!selectedNode) return;
-  const dx = e.clientX - selectedNode.x;
-  const dy = e.clientY - selectedNode.y;
-  selectedNode.vx += dx*0.2;
-  selectedNode.vy += dy*0.2;
-
-  // fluid effect on nearby nodes
+  const dx=e.clientX-selectedNode.x;
+  const dy=e.clientY-selectedNode.y;
+  selectedNode.vx+=dx*0.2; selectedNode.vy+=dy*0.2;
   nodes.forEach(n=>{
     if(n===selectedNode) return;
-    const dist = Math.hypot(n.x-selectedNode.x, n.y-selectedNode.y);
+    const dist=Math.hypot(n.x-selectedNode.x,n.y-selectedNode.y);
     if(dist<120){
-      const factor = (120-dist)/120*0.15;
-      n.vx += selectedNode.vx*factor;
-      n.vy += selectedNode.vy*factor;
+      const factor=(120-dist)/120*0.15;
+      n.vx+=selectedNode.vx*factor; n.vy+=selectedNode.vy*factor;
     }
   });
 });
 
-// LINES
 function drawLines(){
   for(let i=0;i<nodes.length;i++){
     for(let j=i+1;j<nodes.length;j++){
       const a=nodes[i], b=nodes[j];
       const dx=a.x-b.x, dy=a.y-b.y;
-      const dist = Math.sqrt(dx*dx+dy*dy);
+      const dist=Math.sqrt(dx*dx+dy*dy);
       if(dist<MAX_DISTANCE){
-        ctx.strokeStyle = `rgba(255,0,0,${1-dist/MAX_DISTANCE})`;
-        ctx.lineWidth = 1;
+        ctx.strokeStyle=`rgba(255,0,0,${1-dist/MAX_DISTANCE})`;
+        ctx.lineWidth=1;
         ctx.beginPath();
         ctx.moveTo(a.x,a.y);
         ctx.lineTo(b.x,b.y);
@@ -192,7 +129,6 @@ function drawLines(){
   }
 }
 
-// ANIMATE
 function animate(){
   ctx.clearRect(0,0,width,height);
   nodes.forEach(n=>{ n.update(); n.draw(); });
@@ -201,7 +137,6 @@ function animate(){
 }
 animate();
 
-// RESIZE
 window.addEventListener('resize', ()=>{
   width=canvas.width=window.innerWidth;
   height=canvas.height=window.innerHeight;
@@ -236,7 +171,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host"}
   ];
 
-  const news = [
+  const news=[
     {title:"RocketMCC-Network shutdown", text:"shutdown"},
     {title:"Clients Updated", text:"Tuff and Astra updated to WASM."},
     {title:"added Shadow Client", text:"added shadow client"}
@@ -255,33 +190,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
     mainContent.innerHTML="";
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
+    mainContent.appendChild(wrapper);
 
     if(id==="clientsBtn"){
-      clients.forEach(c=>{
-        const box=document.createElement('div'); box.className="clientBox";
-        box.innerHTML=`<div>${c.name}</div><button>Launch</button>`;
-        box.querySelector("button").addEventListener("click",()=>launchClient(c.url));
-        wrapper.appendChild(box);
-      });
-    } 
-    else if(id==="serversBtn"){
+      const launchBtn = document.createElement('div');
+      launchBtn.className='clientBox';
+      launchBtn.textContent='Launch Client';
+      launchBtn.addEventListener('click', openModal);
+      wrapper.appendChild(launchBtn);
+    } else if(id==="serversBtn"){
       servers.forEach(s=>{
         const box=document.createElement('div'); box.className="serverBox";
         box.innerHTML=`<div>${s.name}</div><div>${s.ip}</div><button>Copy</button>`;
         box.querySelector("button").addEventListener("click",()=>copyIP(s.ip));
         wrapper.appendChild(box);
       });
-    }
-    else if(id==="newsBtn"){
+    } else if(id==="newsBtn"){
       news.forEach(n=>{
-        const box=document.createElement('div'); 
-        box.className="newsBox";
+        const box=document.createElement('div'); box.className="newsBox";
         box.innerHTML=`<h3>${n.title}</h3><p>${n.text}</p>`;
         wrapper.appendChild(box);
       });
     }
-
-    mainContent.appendChild(wrapper);
   }
 
   function launchClient(url){
@@ -304,6 +234,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   loadSection("clientsBtn");
 });
+
+// -------------------- CLIENT MODAL FUNCTIONS --------------------
+function openModal(){
+  const modal = document.getElementById('clientModal');
+  const modalButtons = document.getElementById('modalButtons');
+  modalButtons.innerHTML='';
+  const clients=[
+    {name:"Astra Client", url:"https://astraclient.com/play/wasm/18/"},
+    {name:"Tuff Client", url:"https://tuff.speedslicer.dev/files/1_1UT6/WASM/"},
+    {name:"Pixel Client", url:"https://example.com/pixel"},
+    {name:"Resent Client", url:"https://resent4-0.vercel.app"},
+    {name:"Shadow Client", url:"https://peytonplayz595.github.io/Shadow-4.0/javascript/"}
+  ];
+  clients.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.textContent=c.name;
+    btn.addEventListener('click',()=>launchClient(c.url));
+    modalButtons.appendChild(btn);
+  });
+  modal.style.display='flex';
+}
+function closeModal(){ document.getElementById('clientModal').style.display='none'; }
 </script>
 </body>
 </html>
