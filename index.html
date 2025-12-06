@@ -14,16 +14,46 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 .section:hover { background:rgba(255,0,0,0.3); box-shadow:0 0 25px rgba(255,0,0,0.7); transform:scale(1.05); }
 .section.active { background:rgba(255,0,0,0.25); box-shadow:0 0 30px rgba(255,0,0,0.8); transform:scale(1.05); }
 .listWrapper { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
-.clientBox, .serverBox, .newsBox { background: rgba(20,0,0,0.5); border:2px solid #ff0000; border-radius:10px; padding:20px; width:220px; transition: all 0.3s ease; cursor:pointer; backdrop-filter: blur(5px); text-align:center; }
-.clientBox:hover, .serverBox:hover, .newsBox:hover { background: rgba(255,0,0,0.2); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05);}
-.clientBox button, .serverBox button { margin-top:10px; padding:8px 15px; border:none; border-radius:5px; background: rgba(255,0,0,0.8); color:#fff; cursor:pointer; font-weight:bold; }
+
+.clientBox, .serverBox, .newsBox {
+  background: rgba(20,0,0,0.5);
+  border:2px solid #ff0000;
+  border-radius:10px;
+  padding:20px;
+  width:220px;
+  transition: all 0.3s ease;
+  cursor:pointer;
+  backdrop-filter: blur(5px);
+  text-align:center;
+}
+
+/* 🔴 ADDED THE RED TEXT COLOR FOR THE LAUNCH CLIENT BUTTON */
+.clientBox {
+  color:#ff0000;
+}
+
+.clientBox:hover, .serverBox:hover, .newsBox:hover {
+  background: rgba(255,0,0,0.2);
+  box-shadow: 0 0 20px rgba(255,0,0,0.7);
+  transform: scale(1.05);
+}
+
+.clientBox button, .serverBox button {
+  margin-top:10px; padding:8px 15px; border:none; border-radius:5px;
+  background: rgba(255,0,0,0.8); color:#fff; cursor:pointer; font-weight:bold;
+}
 .clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9); }
 
 /* Modal styles */
 #clientModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:10; }
 #clientModalContent { background:#0d0d0d; border:2px solid #ff0000; border-radius:10px; padding:30px; text-align:center; max-width:400px; }
 #clientModalContent h2 { color: #ff0000; margin-bottom: 20px; }
-#modalButtons button { padding:10px; border:none; border-radius:10px; background:rgba(20,0,0,0.6); color:#ff0000; font-weight:bold; cursor:pointer; font-size:16px; box-shadow:0 0 0 rgba(255,0,0,0); transition:all 0.3s ease; width:100%; margin-top:5px;}
+#modalButtons button {
+  padding:10px; border:none; border-radius:10px;
+  background:rgba(20,0,0,0.6); color:#ff0000; font-weight:bold; cursor:pointer;
+  font-size:16px; box-shadow:0 0 0 rgba(255,0,0,0); transition:all 0.3s ease;
+  width:100%; margin-top:5px;
+}
 #modalButtons button:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05); }
 #clientModalContent button.closeBtn { margin-top:20px; padding:10px 20px; border:none; border-radius:5px; background:#ff0000; color:#fff; cursor:pointer; }
 #clientModalContent button.closeBtn:hover { background: rgba(255,85,85,0.9); }
