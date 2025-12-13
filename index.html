@@ -4,15 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RocketMCC</title>
+
 <style>
 body, html { margin:0; padding:0; font-family:Arial; overflow:hidden; background:#0d0d0d; color:#fff; }
 #background { position:fixed; top:0; left:0; z-index:0; }
 .content { position:relative; z-index:1; text-align:center; padding:50px; }
+
+/* LOGO */
+.site-logo {
+  width:140px;
+  max-width:40vw;
+  margin-bottom:20px;
+  filter: drop-shadow(0 0 20px rgba(255,0,0,0.7));
+}
+
 h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 .sections { display:flex; gap:20px; justify-content:center; margin-bottom:30px; }
-.section { background:rgba(20,0,0,0.6); border:2px solid #ff0000; border-radius:10px; padding:15px 30px; font-size:18px; font-weight:bold; color:#ff0000; cursor:pointer; transition:all 0.3s ease; backdrop-filter: blur(5px); }
+
+.section {
+  background:rgba(20,0,0,0.6);
+  border:2px solid #ff0000;
+  border-radius:10px;
+  padding:15px 30px;
+  font-size:18px;
+  font-weight:bold;
+  color:#ff0000;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
 .section:hover { background:rgba(255,0,0,0.3); box-shadow:0 0 25px rgba(255,0,0,0.7); transform:scale(1.05); }
 .section.active { background:rgba(255,0,0,0.25); box-shadow:0 0 30px rgba(255,0,0,0.8); transform:scale(1.05); }
+
 .listWrapper { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
 
 .clientBox, .serverBox, .newsBox {
@@ -27,10 +50,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   text-align:center;
 }
 
-/* 🔴 ADDED THE RED TEXT COLOR FOR THE LAUNCH CLIENT BUTTON */
-.clientBox {
-  color:#ff0000;
-}
+.clientBox { color:#ff0000; }
 
 .clientBox:hover, .serverBox:hover, .newsBox:hover {
   background: rgba(255,0,0,0.2);
@@ -44,26 +64,33 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 }
 .clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9); }
 
-/* Modal styles */
+/* MODAL */
 #clientModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:10; }
 #clientModalContent { background:#0d0d0d; border:2px solid #ff0000; border-radius:10px; padding:30px; text-align:center; max-width:400px; }
-#clientModalContent h2 { color: #ff0000; margin-bottom: 20px; }
+#clientModalContent h2 { color:#ff0000; margin-bottom:20px; }
+
 #modalButtons button {
   padding:10px; border:none; border-radius:10px;
-  background:rgba(20,0,0,0.6); color:#ff0000; font-weight:bold; cursor:pointer;
-  font-size:16px; box-shadow:0 0 0 rgba(255,0,0,0); transition:all 0.3s ease;
-  width:100%; margin-top:5px;
+  background:rgba(20,0,0,0.6); color:#ff0000; font-weight:bold;
+  cursor:pointer; font-size:16px; width:100%; margin-top:5px;
+  transition:all 0.3s ease;
 }
 #modalButtons button:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05); }
-#clientModalContent button.closeBtn { margin-top:20px; padding:10px 20px; border:none; border-radius:5px; background:#ff0000; color:#fff; cursor:pointer; }
-#clientModalContent button.closeBtn:hover { background: rgba(255,85,85,0.9); }
+
+.closeBtn {
+  margin-top:20px; padding:10px 20px; border:none;
+  border-radius:5px; background:#ff0000; color:#fff; cursor:pointer;
+}
 </style>
 </head>
+
 <body>
 
 <canvas id="background"></canvas>
 
 <div class="content">
+  <!-- LOGO -->
+  <img src="logo.png" alt="RocketMCC Logo" class="site-logo">
   <h1>RocketMCC</h1>
 
   <div class="sections">
@@ -76,7 +103,6 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   <div id="mainContent"></div>
 </div>
 
-<!-- Modal for clients -->
 <div id="clientModal">
   <div id="clientModalContent">
     <h2>Select Client</h2>
@@ -131,29 +157,40 @@ class Node {
     if(this.y<0){ this.y=0; this.vy*=-1; }
     if(this.y>height){ this.y=height; this.vy*=-1; }
   }
-  draw() { ctx.fillStyle="#ff0000"; ctx.beginPath(); ctx.arc(this.x,this.y,3,0,Math.PI*2); ctx.fill(); }
+  draw() {
+    ctx.fillStyle="#ff0000";
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.fill();
+  }
 }
 
 function initNodes(){ nodes=[]; for(let i=0;i<NODE_COUNT;i++) nodes.push(new Node()); }
 initNodes();
 
+/* DRAG INTERACTION */
 let selectedNode = null;
+
 canvas.addEventListener("mousedown", e=>{
   const mx=e.clientX, my=e.clientY;
   selectedNode = nodes.find(n=>Math.hypot(n.x-mx,n.y-my)<10);
 });
+
 window.addEventListener("mouseup", ()=>selectedNode=null);
+
 window.addEventListener("mousemove", e=>{
   if(!selectedNode) return;
   const dx=e.clientX-selectedNode.x;
   const dy=e.clientY-selectedNode.y;
-  selectedNode.vx+=dx*0.2; selectedNode.vy+=dy*0.2;
+  selectedNode.vx+=dx*0.2;
+  selectedNode.vy+=dy*0.2;
   nodes.forEach(n=>{
     if(n===selectedNode) return;
     const dist=Math.hypot(n.x-selectedNode.x,n.y-selectedNode.y);
     if(dist<120){
       const factor=(120-dist)/120*0.15;
-      n.vx+=selectedNode.vx*factor; n.vy+=selectedNode.vy*factor;
+      n.vx+=selectedNode.vx*factor;
+      n.vy+=selectedNode.vy*factor;
     }
   });
 });
@@ -166,7 +203,6 @@ function drawLines(){
       const dist=Math.sqrt(dx*dx+dy*dy);
       if(dist<MAX_DISTANCE){
         ctx.strokeStyle=`rgba(255,0,0,${1-dist/MAX_DISTANCE})`;
-        ctx.lineWidth=1;
         ctx.beginPath();
         ctx.moveTo(a.x,a.y);
         ctx.lineTo(b.x,b.y);
@@ -241,7 +277,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       servers.forEach(s=>{
         const box=document.createElement('div'); box.className="serverBox";
         box.innerHTML=`<div>${s.name}</div><div>${s.ip}</div><button>Copy</button>`;
-        box.querySelector("button").addEventListener("click",()=>copyIP(s.ip));
+        box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
         wrapper.appendChild(box);
       });
     } else if(id==="newsBtn"){
@@ -253,12 +289,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   }
 
-  function copyIP(ip){ navigator.clipboard.writeText(ip); alert("Copied IP: "+ip); }
-
   loadSection("clientsBtn");
 });
 
-// -------------------- CLIENT MODAL FUNCTIONS --------------------
+// -------------------- MODAL --------------------
 function openModal(){
   const modal = document.getElementById('clientModal');
   const modalButtons = document.getElementById('modalButtons');
@@ -280,5 +314,6 @@ function openModal(){
 }
 function closeModal(){ document.getElementById('clientModal').style.display='none'; }
 </script>
+
 </body>
 </html>
