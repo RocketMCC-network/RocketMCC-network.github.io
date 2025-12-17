@@ -93,6 +93,11 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   <img src="logo.png" alt="RocketMCC Logo" class="site-logo">
   <h1>RocketMCC</h1>
 
+  <!-- 🔴 Online User Counter -->
+  <div style="margin-bottom:20px; font-size:18px; color:#ff5555;">
+    Online users: <span id="onlineCount">0</span>
+  </div>
+
   <div class="sections">
     <div class="section active" id="clientsBtn">Clients</div>
     <div class="section" id="serversBtn">Servers</div>
@@ -313,6 +318,37 @@ function openModal(){
   modal.style.display='flex';
 }
 function closeModal(){ document.getElementById('clientModal').style.display='none'; }
+</script>
+
+<!-- 🔴 FIREBASE LIVE COUNTER FIXED -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+// ✅ Correct Firebase Realtime Database URL
+const firebaseConfig = {
+  databaseURL: "https://rocketmcc-network-default-rtdb.firebaseio.com"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Unique ID per visitor
+const userId = crypto.randomUUID();
+const userRef = ref(db, "onlineUsers/" + userId);
+
+// Mark online
+set(userRef, true);
+
+// Remove on disconnect
+onDisconnect(userRef).remove();
+
+// Update counter in real time
+onValue(ref(db, "onlineUsers"), snapshot => {
+  document.getElementById("onlineCount").textContent =
+    snapshot.exists() ? snapshot.size : 0;
+});
 </script>
 
 </body>
