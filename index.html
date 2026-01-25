@@ -43,12 +43,13 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   background: rgba(20,0,0,0.5);
   border:2px solid #ff0000;
   border-radius:10px;
-  padding:20px;
-  width:220px;
+  padding:12px;
+  width:190px;
   transition: all 0.3s ease;
   cursor:pointer;
   backdrop-filter: blur(5px);
   text-align:center;
+  font-size:14px;
 }
 .clientBox { color:#ff0000; }
 .clientBox:hover, .serverBox:hover, .newsBox:hover {
@@ -57,8 +58,15 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   transform: scale(1.05);
 }
 .clientBox button, .serverBox button, .newsBox button {
-  margin-top:10px; padding:8px 15px; border:none; border-radius:5px;
-  background: rgba(255,0,0,0.8); color:#fff; cursor:pointer; font-weight:bold;
+  margin-top:8px;
+  padding:7px 12px;
+  border:none;
+  border-radius:5px;
+  background: rgba(255,0,0,0.8);
+  color:#fff;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:13px;
 }
 .clientBox button:hover, .serverBox button:hover, .newsBox button:hover { background: rgba(255,85,85,0.9); }
 
@@ -114,7 +122,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 /* NEW: Scroll area fix */
 .serverScroll {
-  height: calc(100vh - 280px); /* FIXED */
+  height: calc(100vh - 240px);
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 10px;
