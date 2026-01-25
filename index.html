@@ -39,15 +39,16 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 .listWrapper { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
 
-/* SCROLLABLE SERVERS SECTION (ONLY) */
+/* NEW: SCROLLABLE SERVERS SECTION */
 .serverListScroll {
-  max-height: 60vh;
-  overflow-y: auto;
   width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
+  flex: 1 1 100%;
 }
 
 .clientBox, .serverBox, .newsBox {
@@ -310,7 +311,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 08", ip:"wss://example8.server"},
     {name:"Example Server 09", ip:"wss://example9.server"},
     {name:"Example Server 10", ip:"wss://example10.server"},
-
     {name:"Example Server 11", ip:"wss://example11.server"},
     {name:"Example Server 12", ip:"wss://example12.server"},
     {name:"Example Server 13", ip:"wss://example13.server"},
@@ -321,7 +321,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 18", ip:"wss://example18.server"},
     {name:"Example Server 19", ip:"wss://example19.server"},
     {name:"Example Server 20", ip:"wss://example20.server"},
-
     {name:"Example Server 21", ip:"wss://example21.server"},
     {name:"Example Server 22", ip:"wss://example22.server"},
     {name:"Example Server 23", ip:"wss://example23.server"},
@@ -332,7 +331,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 28", ip:"wss://example28.server"},
     {name:"Example Server 29", ip:"wss://example29.server"},
     {name:"Example Server 30", ip:"wss://example30.server"},
-
     {name:"Example Server 31", ip:"wss://example31.server"},
     {name:"Example Server 32", ip:"wss://example32.server"},
     {name:"Example Server 33", ip:"wss://example33.server"},
@@ -343,7 +341,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 38", ip:"wss://example38.server"},
     {name:"Example Server 39", ip:"wss://example39.server"},
     {name:"Example Server 40", ip:"wss://example40.server"},
-
     {name:"Example Server 41", ip:"wss://example41.server"},
     {name:"Example Server 42", ip:"wss://example42.server"},
     {name:"Example Server 43", ip:"wss://example43.server"},
