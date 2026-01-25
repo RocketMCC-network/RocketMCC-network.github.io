@@ -111,6 +111,13 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
       0 0 60px #ff0000;
   }
 }
+
+/* SCROLLABLE SERVERS SECTION */
+.serverListScroll {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
 </style>
 </head>
 
@@ -376,8 +383,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
       wrapper.appendChild(launchBtn);
 
     } else if(id==="serversBtn"){
+      const scrollArea = document.createElement("div");
+      scrollArea.className = "serverListScroll";
+      wrapper.appendChild(scrollArea);
+
       servers.forEach(s=>{
-        const box=document.createElement('div');
+        const box=document.createElement('div'); 
         box.className="serverBox";
         box.innerHTML = `
           <div>${s.name}</div>
@@ -386,7 +397,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
           <button>Copy</button>
         `;
         box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
-        wrapper.appendChild(box);
+        scrollArea.appendChild(box);
 
         checkServer(s.ip).then(on=>{
           const status = box.querySelector(".status");
