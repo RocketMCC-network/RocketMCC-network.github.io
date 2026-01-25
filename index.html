@@ -263,18 +263,18 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const mainContent = document.getElementById('mainContent');
 
   const servers=[
-    {name:"Hyper Network", ip:"wss://eag.hyper-network.net", host:"eag.hyper-network.net", port:443},
-    {name:"WebMC", ip:"wss://play.webmc.fun", host:"play.webmc.fun", port:443},
-    {name:"ArchMC", ip:"wss://mc.arch.lol", host:"mc.arch.lol", port:443},
-    {name:"Jonarchy", ip:"wss://8b4t.org", host:"8b4t.org", port:443},
-    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store", host:"eagler.radiantnet.store", port:443},
-    {name:"NexoX", ip:"wss://nexo-app.net", host:"nexo-app.net", port:443},
-    {name:"AdderallMC", ip:"wss://adderall.ir", host:"adderall.ir", port:443},
-    {name:"VanillaMC", ip:"wss://vanillamc.org", host:"vanillamc.org", port:443},
-    {name:"VoidsentMC", ip:"wss://mc.voidsent.net", host:"mc.voidsent.net", port:443},
-    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz", host:"mc.lamplifesteal.xyz", port:443},
-    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz", host:"el.exoticmc.xyz", port:443},
-    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host", host:"skeletonmc.eagler.host", port:443}
+    {name:"Hyper Network", ip:"wss://eag.hyper-network.net", host:"eag.hyper-network.net"},
+    {name:"WebMC", ip:"wss://play.webmc.fun", host:"play.webmc.fun"},
+    {name:"ArchMC", ip:"wss://mc.arch.lol", host:"mc.arch.lol"},
+    {name:"Jonarchy", ip:"wss://8b4t.org", host:"8b4t.org"},
+    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store", host:"eagler.radiantnet.store"},
+    {name:"NexoX", ip:"wss://nexo-app.net", host:"nexo-app.net"},
+    {name:"AdderallMC", ip:"wss://adderall.ir", host:"adderall.ir"},
+    {name:"VanillaMC", ip:"wss://vanillamc.org", host:"vanillamc.org"},
+    {name:"VoidsentMC", ip:"wss://mc.voidsent.net", host:"mc.voidsent.net"},
+    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz", host:"mc.lamplifesteal.xyz"},
+    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz", host:"el.exoticmc.xyz"},
+    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host", host:"skeletonmc.eagler.host"}
   ];
 
   const news=[
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         wrapper.appendChild(box);
 
         const statusEl = document.getElementById(`status-${s.name.replace(/\s/g,"")}`);
-        const data = await getServerStatus(s.host, s.port);
+        const data = await getServerStatus(s.host);
 
         if(!data) {
           statusEl.textContent = "⚠️ Error";
@@ -354,9 +354,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 });
 
 // -------------------- SERVER STATUS --------------------
-async function getServerStatus(host, port) {
+async function getServerStatus(host) {
   try {
-    const res = await fetch(`https://topeaglerservers.com/api/status/${host}:${port}`);
+    const res = await fetch(`https://topeaglerservers.com/api/status/${host}`);
     const data = await res.json();
     return data;
   } catch (e) {
