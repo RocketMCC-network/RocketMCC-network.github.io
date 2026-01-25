@@ -114,7 +114,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 /* NEW: Scroll area fix */
 .serverScroll {
-  height: 55vh;
+  height: calc(100vh - 280px); /* FIXED */
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 10px;
@@ -298,8 +298,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz"},
     {name:"ExoticMC", ip:"wss://el.exoticmc.xyz"},
     {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host"},
-
-    /* 48 NEW EXAMPLE SERVERS */
     {name:"Example Server 1", ip:"wss://example1.eaglercraft.net"},
     {name:"Example Server 2", ip:"wss://example2.eaglercraft.net"},
     {name:"Example Server 3", ip:"wss://example3.eaglercraft.net"},
@@ -388,7 +386,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     } else if(id==="serversBtn"){
       servers.forEach(s=>{
-        const box=document.createElement('div'); 
+        const box=document.createElement('div');
         box.className="serverBox";
         box.innerHTML = `
           <div>${s.name}</div>
