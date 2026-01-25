@@ -10,7 +10,6 @@ body, html { margin:0; padding:0; font-family:Arial; overflow:hidden; background
 #background { position:fixed; top:0; left:0; z-index:0; }
 .content { position:relative; z-index:1; text-align:center; padding:50px; }
 
-/* LOGO */
 .site-logo {
   width:140px;
   max-width:40vw;
@@ -20,7 +19,6 @@ body, html { margin:0; padding:0; font-family:Arial; overflow:hidden; background
 
 h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
-/* Sections */
 .sections { display:flex; gap:20px; justify-content:center; margin-bottom:30px; }
 .section {
   background:rgba(20,0,0,0.6);
@@ -32,7 +30,6 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   color:#ff0000;
   cursor:pointer;
   transition:all 0.3s ease;
-  backdrop-filter: blur(5px);
 }
 .section:hover { background:rgba(255,0,0,0.3); box-shadow:0 0 25px rgba(255,0,0,0.7); transform:scale(1.05); }
 .section.active { background:rgba(255,0,0,0.25); box-shadow:0 0 30px rgba(255,0,0,0.8); transform:scale(1.05); }
@@ -50,66 +47,33 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   backdrop-filter: blur(5px);
   text-align:center;
 }
-.clientBox { color:#ff0000; }
 .clientBox:hover, .serverBox:hover, .newsBox:hover {
   background: rgba(255,0,0,0.2);
   box-shadow: 0 0 20px rgba(255,0,0,0.7);
   transform: scale(1.05);
 }
-.clientBox button, .serverBox button {
-  margin-top:10px; padding:8px 15px; border:none; border-radius:5px;
-  background: rgba(255,0,0,0.8); color:#fff; cursor:pointer; font-weight:bold;
-}
-.clientBox button:hover, .serverBox button:hover { background: rgba(255,85,85,0.9); }
 
-/* MODAL */
-#clientModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:10; }
-#clientModalContent { background:#0d0d0d; border:2px solid #ff0000; border-radius:10px; padding:30px; text-align:center; max-width:400px; }
-#clientModalContent h2 { color:#ff0000; margin-bottom:20px; }
-#modalButtons button {
-  padding:10px; border:none; border-radius:10px;
-  background:rgba(20,0,0,0.6); color:#ff0000; font-weight:bold;
-  cursor:pointer; font-size:16px; width:100%; margin-top:5px;
-  transition:all 0.3s ease;
-}
-#modalButtons button:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 20px rgba(255,0,0,0.7); transform: scale(1.05); }
-.closeBtn {
-  margin-top:20px; padding:10px 20px; border:none;
-  border-radius:5px; background:#ff0000; color:#fff; cursor:pointer;
-}
+.server-status { margin-top:8px; font-weight:bold; }
+.server-status.online { color:#00ff00; }
+.server-status.offline { color:#ff0000; }
 
-/* 🔴 Entire online counter glows like RocketMCC title */
-#onlineCounter, #onlineCount {
-  color: #ff0000;
-  text-shadow:
-    0 0 5px #ff0000,
-    0 0 10px #ff0000,
-    0 0 20px #ff0000,
-    0 0 30px #ff0000,
-    0 0 40px #ff0000,
-    0 0 50px #ff0000;
-  animation: pulseCounter 1.5s infinite alternate;
+button {
+  margin-top:10px;
+  padding:8px 15px;
+  border:none;
+  border-radius:5px;
+  background: rgba(255,0,0,0.8);
+  color:#fff;
+  cursor:pointer;
+  font-weight:bold;
 }
+button:hover { background: rgba(255,85,85,0.9); }
 
-@keyframes pulseCounter {
-  0% {
-    text-shadow:
-      0 0 5px #ff0000,
-      0 0 10px #ff0000,
-      0 0 20px #ff0000,
-      0 0 30px #ff0000,
-      0 0 40px #ff0000,
-      0 0 50px #ff0000;
-  }
-  100% {
-    text-shadow:
-      0 0 10px #ff0000,
-      0 0 20px #ff0000,
-      0 0 30px #ff0000,
-      0 0 40px #ff0000,
-      0 0 50px #ff0000,
-      0 0 60px #ff0000;
-  }
+#onlineCounter {
+  margin-bottom:20px;
+  font-size:18px;
+  color:#ff0000;
+  text-shadow:0 0 10px #ff0000;
 }
 </style>
 </head>
@@ -119,12 +83,10 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 <canvas id="background"></canvas>
 
 <div class="content">
-  <!-- LOGO -->
-  <img src="logo.png" alt="RocketMCC Logo" class="site-logo">
+  <img src="logo.png" class="site-logo">
   <h1>RocketMCC</h1>
 
-  <!-- 🔴 Online User Counter -->
-  <div id="onlineCounter" style="margin-bottom:20px; font-size:18px;">
+  <div id="onlineCounter">
     Online users: <span id="onlineCount">0</span>
   </div>
 
@@ -138,37 +100,14 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   <div id="mainContent"></div>
 </div>
 
-<div id="clientModal">
-  <div id="clientModalContent">
-    <h2>Select Client</h2>
-    <div id="modalButtons"></div>
-    <button class="closeBtn" onclick="closeModal()">Close</button>
-  </div>
-</div>
-
 <script>
-// -------------------- GLOBAL FUNCTION --------------------
-function launchClient(url){
-  const win=window.open('about:blank','_blank','width=800,height=600');
-  win.document.write(`
-    <html>
-      <head><title>RocketMCC</title></head>
-      <body style="background:#0d0d0d;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial;font-size:24px;">
-        Loading client...
-        <script>
-          setTimeout(()=>{ window.location.href="${url}"; }, 500);
-        <\/script>
-      </body>
-    </html>
-  `);
-  win.document.close();
-}
-
 // -------------------- BACKGROUND ANIMATION --------------------
 const canvas = document.getElementById('background');
 const ctx = canvas.getContext('2d');
+
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
+
 const NODE_COUNT = 80;
 const MAX_DISTANCE = 150;
 let nodes = [];
@@ -185,229 +124,178 @@ class Node {
     this.y += this.vy;
     this.vx += (Math.random()-0.5)*0.05;
     this.vy += (Math.random()-0.5)*0.05;
-    const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
-    if(speed>1.5){ this.vx=this.vx/speed*1.5; this.vy=this.vy/speed*1.5; }
-    if(this.x<0){ this.x=0; this.vx*=-1; }
-    if(this.x>width){ this.x=width; this.vx*=-1; }
-    if(this.y<0){ this.y=0; this.vy*=-1; }
-    if(this.y>height){ this.y=height; this.vy*=-1; }
+
+    const speed = Math.hypot(this.vx, this.vy);
+    if (speed > 1.5) {
+      this.vx = this.vx / speed * 1.5;
+      this.vy = this.vy / speed * 1.5;
+    }
+
+    if (this.x < 0 || this.x > width) this.vx *= -1;
+    if (this.y < 0 || this.y > height) this.vy *= -1;
   }
   draw() {
-    ctx.fillStyle="#ff0000";
+    ctx.fillStyle = "#ff0000";
     ctx.beginPath();
-    ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
     ctx.fill();
   }
 }
 
-function initNodes(){ nodes=[]; for(let i=0;i<NODE_COUNT;i++) nodes.push(new Node()); }
+function initNodes() {
+  nodes = [];
+  for (let i = 0; i < NODE_COUNT; i++) nodes.push(new Node());
+}
 initNodes();
 
-let selectedNode = null;
-canvas.addEventListener("mousedown", e=>{
-  const mx=e.clientX, my=e.clientY;
-  selectedNode = nodes.find(n=>Math.hypot(n.x-mx,n.y-my)<10);
-});
-window.addEventListener("mouseup", ()=>selectedNode=null);
-window.addEventListener("mousemove", e=>{
-  if(!selectedNode) return;
-  const dx=e.clientX-selectedNode.x;
-  const dy=e.clientY-selectedNode.y;
-  selectedNode.vx+=dx*0.2;
-  selectedNode.vy+=dy*0.2;
-  nodes.forEach(n=>{
-    if(n===selectedNode) return;
-    const dist=Math.hypot(n.x-selectedNode.x,n.y-selectedNode.y);
-    if(dist<120){
-      const factor=(120-dist)/120*0.15;
-      n.vx+=selectedNode.vx*factor;
-      n.vy+=selectedNode.vy*factor;
-    }
-  });
-});
-
-function drawLines(){
-  for(let i=0;i<nodes.length;i++){
-    for(let j=i+1;j<nodes.length;j++){
-      const a=nodes[i], b=nodes[j];
-      const dx=a.x-b.x, dy=a.y-b.y;
-      const dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<MAX_DISTANCE){
-        ctx.strokeStyle=`rgba(255,0,0,${1-dist/MAX_DISTANCE})`;
+function drawLines() {
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+      if (dist < MAX_DISTANCE) {
+        ctx.strokeStyle = `rgba(255,0,0,${1 - dist / MAX_DISTANCE})`;
         ctx.beginPath();
-        ctx.moveTo(a.x,a.y);
-        ctx.lineTo(b.x,b.y);
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
         ctx.stroke();
       }
     }
   }
 }
 
-function animate(){
-  ctx.clearRect(0,0,width,height);
-  nodes.forEach(n=>{ n.update(); n.draw(); });
+function animate() {
+  ctx.clearRect(0, 0, width, height);
+  nodes.forEach(n => { n.update(); n.draw(); });
   drawLines();
   requestAnimationFrame(animate);
 }
 animate();
 
-window.addEventListener('resize', ()=>{
-  width=canvas.width=window.innerWidth;
-  height=canvas.height=window.innerHeight;
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
   initNodes();
 });
 
+// -------------------- SERVER STATUS CHECK --------------------
+function checkEaglerServer(wssUrl, timeout = 3000) {
+  return new Promise(resolve => {
+    let ws;
+    try { ws = new WebSocket(wssUrl); }
+    catch { resolve(false); return; }
+
+    const timer = setTimeout(() => {
+      ws.close();
+      resolve(false);
+    }, timeout);
+
+    ws.onopen = () => {
+      clearTimeout(timer);
+      ws.close();
+      resolve(true);
+    };
+
+    ws.onerror = () => {
+      clearTimeout(timer);
+      resolve(false);
+    };
+  });
+}
+
 // -------------------- MAIN CONTENT --------------------
-document.addEventListener("DOMContentLoaded", ()=>{
-  const sections = document.querySelectorAll('.section');
-  const mainContent = document.getElementById('mainContent');
+document.addEventListener("DOMContentLoaded", () => {
+  const mainContent = document.getElementById("mainContent");
+  const sections = document.querySelectorAll(".section");
 
-  const servers=[
-    {name:"Hyper Network", ip:"wss://eag.hyper-network.net", host:"eag.hyper-network.net"},
-    {name:"WebMC", ip:"wss://play.webmc.fun", host:"play.webmc.fun"},
-    {name:"ArchMC", ip:"wss://mc.arch.lol", host:"mc.arch.lol"},
-    {name:"Jonarchy", ip:"wss://8b4t.org", host:"8b4t.org"},
-    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store", host:"eagler.radiantnet.store"},
-    {name:"NexoX", ip:"wss://nexo-app.net", host:"nexo-app.net"},
-    {name:"AdderallMC", ip:"wss://adderall.ir", host:"adderall.ir"},
-    {name:"VanillaMC", ip:"wss://vanillamc.org", host:"vanillamc.org"},
-    {name:"VoidsentMC", ip:"wss://mc.voidsent.net", host:"mc.voidsent.net"},
-    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz", host:"mc.lamplifesteal.xyz"},
-    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz", host:"el.exoticmc.xyz"},
-    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host", host:"skeletonmc.eagler.host"}
+  const servers = [
+    { name:"Hyper Network", ip:"wss://eag.hyper-network.net" },
+    { name:"WebMC", ip:"wss://play.webmc.fun" },
+    { name:"ArchMC", ip:"wss://mc.arch.lol" },
+    { name:"Jonarchy", ip:"wss://8b4t.org" },
+    { name:"Radiant Network", ip:"wss://eagler.radiantnet.store" },
+    { name:"NexoX", ip:"wss://nexo-app.net" },
+    { name:"AdderallMC", ip:"wss://adderall.ir" },
+    { name:"VanillaMC", ip:"wss://vanillamc.org" },
+    { name:"VoidsentMC", ip:"wss://mc.voidsent.net" },
+    { name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz" },
+    { name:"ExoticMC", ip:"wss://el.exoticmc.xyz" },
+    { name:"SkeletonMC", ip:"wss://skeletonmc.eagler.host" }
   ];
 
-  const news=[
-    {title:"RocketMCC-Network shutdown", text:"shutdown"},
-    {title:"Clients Updated", text:"Tuff and Astra updated to WASM."},
-    {title:"added Shadow Client", text:"added shadow client"}
-  ];
-
-  sections.forEach(section=>{
-    section.addEventListener('click', ()=>{
-      sections.forEach(s=>s.classList.remove('active'));
-      section.classList.add('active');
-      if(section.id==="forumBtn"){ window.open("https://eaglercraftarchive.freeflarum.com","_blank"); return;}
-      loadSection(section.id);
-    });
+  sections.forEach(btn => {
+    btn.onclick = () => {
+      sections.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (btn.id === "forumBtn") {
+        window.open("https://eaglercraftarchive.freeflarum.com","_blank");
+        return;
+      }
+      loadSection(btn.id);
+    };
   });
 
-  function loadSection(id){
-    mainContent.innerHTML="";
+  function loadSection(id) {
+    mainContent.innerHTML = "";
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
     mainContent.appendChild(wrapper);
 
-    if(id==="clientsBtn"){
-      const launchBtn = document.createElement('div');
-      launchBtn.className='clientBox';
-      launchBtn.textContent='Launch Client';
-      launchBtn.addEventListener('click', openModal);
-      wrapper.appendChild(launchBtn);
+    if (id === "serversBtn") {
+      servers.forEach(s => {
+        const box = document.createElement("div");
+        box.className = "serverBox";
 
-    } else if(id==="serversBtn"){
-      servers.forEach(async s=>{
-        const box=document.createElement('div'); 
-        box.className="serverBox";
-        box.innerHTML=`
+        box.innerHTML = `
           <div>${s.name}</div>
-          <div>${s.ip}</div>
-          <div id="status-${s.name.replace(/\s/g,"")}">Checking...</div>
-          <button>Copy</button>
+          <div style="font-size:12px;opacity:0.8">${s.ip}</div>
+          <div class="server-status">Checking...</div>
         `;
-        box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
-        wrapper.appendChild(box);
 
-        const statusEl = document.getElementById(`status-${s.name.replace(/\s/g,"")}`);
-        const data = await getServerStatus(s.host);
+        const statusEl = box.querySelector(".server-status");
 
-        if(!data) {
-          statusEl.textContent = "⚠️ Error";
-          return;
-        }
+        checkEaglerServer(s.ip).then(online => {
+          statusEl.textContent = online ? "🟢 ONLINE" : "🔴 OFFLINE";
+          statusEl.className = "server-status " + (online ? "online" : "offline");
+        });
 
-        if(data.online){
-          statusEl.textContent = `🟢 Online | ${data.players?.online ?? 0} players`;
-        } else {
-          statusEl.textContent = "🔴 Offline";
-        }
-      });
+        const copyBtn = document.createElement("button");
+        copyBtn.textContent = "Copy";
+        copyBtn.onclick = () => navigator.clipboard.writeText(s.ip);
+        box.appendChild(copyBtn);
 
-    } else if(id==="newsBtn"){
-      news.forEach(n=>{
-        const box=document.createElement('div'); 
-        box.className="newsBox";
-        box.innerHTML=`<h3>${n.title}</h3><p>${n.text}</p>`;
         wrapper.appendChild(box);
       });
+    } else {
+      const box = document.createElement("div");
+      box.className = "clientBox";
+      box.textContent = "Launch Client";
+      wrapper.appendChild(box);
     }
   }
 
   loadSection("clientsBtn");
-
-  // 🔁 Auto refresh servers every 10 seconds
-  setInterval(()=>{
-    if(document.querySelector(".section.active").id === "serversBtn"){
-      loadSection("serversBtn");
-    }
-  }, 10000);
 });
-
-// -------------------- SERVER STATUS --------------------
-async function getServerStatus(host) {
-  try {
-    const res = await fetch(`https://topeaglerservers.com/api/status/${host}`);
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    return null;
-  }
-}
-
-// -------------------- MODAL --------------------
-function openModal(){
-  const modal = document.getElementById('clientModal');
-  const modalButtons = document.getElementById('modalButtons');
-  modalButtons.innerHTML='';
-  const clients=[
-    {name:"Astra Client", url:"https://astraclient.com/play/wasm/18/"},
-    {name:"Tuff Client", url:"https://tuff.speedslicer.dev/files/1_1UT12/WASM/"},
-    {name:"Pixel Client", url:"https://example.com/pixel"},
-    {name:"Resent Client", url:"https://elite4r.github.io/Resent-Client/"},
-    {name:"Shadow Client", url:"https://peytonplayz595.github.io/Shadow-4.0/javascript/"}
-  ];
-  clients.forEach(c=>{
-    const btn=document.createElement('button');
-    btn.textContent=c.name;
-    btn.addEventListener('click',()=>launchClient(c.url));
-    modalButtons.appendChild(btn);
-  });
-  modal.style.display='flex';
-}
-function closeModal(){ document.getElementById('clientModal').style.display='none'; }
 </script>
 
-<!-- 🔴 FIREBASE LIVE COUNTER -->
+<!-- FIREBASE ONLINE COUNTER -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-const firebaseConfig = {
+const app = initializeApp({
   databaseURL: "https://rocketmcc-network-default-rtdb.firebaseio.com"
-};
+});
 
-const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const id = crypto.randomUUID();
+const r = ref(db, "onlineUsers/" + id);
 
-const userId = crypto.randomUUID();
-const userRef = ref(db, "onlineUsers/" + userId);
+set(r, true);
+onDisconnect(r).remove();
 
-set(userRef, true);
-onDisconnect(userRef).remove();
-
-onValue(ref(db, "onlineUsers"), snapshot => {
+onValue(ref(db, "onlineUsers"), snap => {
   document.getElementById("onlineCount").textContent =
-    snapshot.exists() ? snapshot.size : 0;
+    snap.exists() ? snap.size : 0;
 });
 </script>
 
