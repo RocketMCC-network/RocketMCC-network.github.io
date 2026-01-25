@@ -114,10 +114,12 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 /* NEW: Scroll area fix */
 .serverScroll {
-  max-height: 55vh; /* adjust if needed */
+  height: 55vh;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 10px; /* prevents cut-off scrollbar */
+  padding-right: 10px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
 }
 </style>
 </head>
