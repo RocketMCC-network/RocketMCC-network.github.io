@@ -263,18 +263,18 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const mainContent = document.getElementById('mainContent');
 
   const servers=[
-    {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
-    {name:"WebMC", ip:"wss://play.webmc.fun"},
-    {name:"ArchMC", ip:"wss://mc.arch.lol"},
-    {name:"Jonarchy", ip:"wss://8b4t.org"},
-    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store"},
-    {name:"NexoX", ip:"wss://nexo-app.net"},
-    {name:"AdderallMC", ip:"wss://adderall.ir"},
-    {name:"VanillaMC", ip:"wss://vanillamc.org"},
-    {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
-    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz"},
-    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz"},
-    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host"}
+    {name:"Hyper Network", ip:"wss://eag.hyper-network.net", host:"eag.hyper-network.net", port:443},
+    {name:"WebMC", ip:"wss://play.webmc.fun", host:"play.webmc.fun", port:443},
+    {name:"ArchMC", ip:"wss://mc.arch.lol", host:"mc.arch.lol", port:443},
+    {name:"Jonarchy", ip:"wss://8b4t.org", host:"8b4t.org", port:443},
+    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store", host:"eagler.radiantnet.store", port:443},
+    {name:"NexoX", ip:"wss://nexo-app.net", host:"nexo-app.net", port:443},
+    {name:"AdderallMC", ip:"wss://adderall.ir", host:"adderall.ir", port:443},
+    {name:"VanillaMC", ip:"wss://vanillamc.org", host:"vanillamc.org", port:443},
+    {name:"VoidsentMC", ip:"wss://mc.voidsent.net", host:"mc.voidsent.net", port:443},
+    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz", host:"mc.lamplifesteal.xyz", port:443},
+    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz", host:"el.exoticmc.xyz", port:443},
+    {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host", host:"skeletonmc.eagler.host", port:443}
   ];
 
   const news=[
@@ -304,16 +304,39 @@ document.addEventListener("DOMContentLoaded", ()=>{
       launchBtn.textContent='Launch Client';
       launchBtn.addEventListener('click', openModal);
       wrapper.appendChild(launchBtn);
+
     } else if(id==="serversBtn"){
-      servers.forEach(s=>{
-        const box=document.createElement('div'); box.className="serverBox";
-        box.innerHTML=`<div>${s.name}</div><div>${s.ip}</div><button>Copy</button>`;
+      servers.forEach(async s=>{
+        const box=document.createElement('div'); 
+        box.className="serverBox";
+        box.innerHTML=`
+          <div>${s.name}</div>
+          <div>${s.ip}</div>
+          <div id="status-${s.name.replace(/\s/g,"")}">Checking...</div>
+          <button>Copy</button>
+        `;
         box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
         wrapper.appendChild(box);
+
+        const statusEl = document.getElementById(`status-${s.name.replace(/\s/g,"")}`);
+        const data = await getServerStatus(s.host, s.port);
+
+        if(!data) {
+          statusEl.textContent = "⚠️ Error";
+          return;
+        }
+
+        if(data.online){
+          statusEl.textContent = `🟢 Online | ${data.players?.online ?? 0} players`;
+        } else {
+          statusEl.textContent = "🔴 Offline";
+        }
       });
+
     } else if(id==="newsBtn"){
       news.forEach(n=>{
-        const box=document.createElement('div'); box.className="newsBox";
+        const box=document.createElement('div'); 
+        box.className="newsBox";
         box.innerHTML=`<h3>${n.title}</h3><p>${n.text}</p>`;
         wrapper.appendChild(box);
       });
@@ -321,7 +344,25 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
   loadSection("clientsBtn");
+
+  // 🔁 Auto refresh servers every 10 seconds
+  setInterval(()=>{
+    if(document.querySelector(".section.active").id === "serversBtn"){
+      loadSection("serversBtn");
+    }
+  }, 10000);
 });
+
+// -------------------- SERVER STATUS --------------------
+async function getServerStatus(host, port) {
+  try {
+    const res = await fetch(`https://topeaglerservers.com/api/status/${host}:${port}`);
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
 
 // -------------------- MODAL --------------------
 function openModal(){
