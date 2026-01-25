@@ -39,18 +39,6 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 .listWrapper { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
 
-/* NEW: SCROLLABLE SERVERS SECTION */
-.serverListScroll {
-  width: 100%;
-  max-height: 70vh;
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  flex: 1 1 100%;
-}
-
 .clientBox, .serverBox, .newsBox {
   background: rgba(20,0,0,0.5);
   border:2px solid #ff0000;
@@ -122,6 +110,14 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
       0 0 50px #ff0000,
       0 0 60px #ff0000;
   }
+}
+
+/* NEW: Scroll area fix */
+.serverScroll {
+  max-height: 55vh; /* adjust if needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px; /* prevents cut-off scrollbar */
 }
 </style>
 </head>
@@ -301,54 +297,55 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"ExoticMC", ip:"wss://el.exoticmc.xyz"},
     {name:"skeletonmc", ip:"wss://skeletonmc.eagler.host"},
 
-    {name:"Example Server 01", ip:"wss://example1.server"},
-    {name:"Example Server 02", ip:"wss://example2.server"},
-    {name:"Example Server 03", ip:"wss://example3.server"},
-    {name:"Example Server 04", ip:"wss://example4.server"},
-    {name:"Example Server 05", ip:"wss://example5.server"},
-    {name:"Example Server 06", ip:"wss://example6.server"},
-    {name:"Example Server 07", ip:"wss://example7.server"},
-    {name:"Example Server 08", ip:"wss://example8.server"},
-    {name:"Example Server 09", ip:"wss://example9.server"},
-    {name:"Example Server 10", ip:"wss://example10.server"},
-    {name:"Example Server 11", ip:"wss://example11.server"},
-    {name:"Example Server 12", ip:"wss://example12.server"},
-    {name:"Example Server 13", ip:"wss://example13.server"},
-    {name:"Example Server 14", ip:"wss://example14.server"},
-    {name:"Example Server 15", ip:"wss://example15.server"},
-    {name:"Example Server 16", ip:"wss://example16.server"},
-    {name:"Example Server 17", ip:"wss://example17.server"},
-    {name:"Example Server 18", ip:"wss://example18.server"},
-    {name:"Example Server 19", ip:"wss://example19.server"},
-    {name:"Example Server 20", ip:"wss://example20.server"},
-    {name:"Example Server 21", ip:"wss://example21.server"},
-    {name:"Example Server 22", ip:"wss://example22.server"},
-    {name:"Example Server 23", ip:"wss://example23.server"},
-    {name:"Example Server 24", ip:"wss://example24.server"},
-    {name:"Example Server 25", ip:"wss://example25.server"},
-    {name:"Example Server 26", ip:"wss://example26.server"},
-    {name:"Example Server 27", ip:"wss://example27.server"},
-    {name:"Example Server 28", ip:"wss://example28.server"},
-    {name:"Example Server 29", ip:"wss://example29.server"},
-    {name:"Example Server 30", ip:"wss://example30.server"},
-    {name:"Example Server 31", ip:"wss://example31.server"},
-    {name:"Example Server 32", ip:"wss://example32.server"},
-    {name:"Example Server 33", ip:"wss://example33.server"},
-    {name:"Example Server 34", ip:"wss://example34.server"},
-    {name:"Example Server 35", ip:"wss://example35.server"},
-    {name:"Example Server 36", ip:"wss://example36.server"},
-    {name:"Example Server 37", ip:"wss://example37.server"},
-    {name:"Example Server 38", ip:"wss://example38.server"},
-    {name:"Example Server 39", ip:"wss://example39.server"},
-    {name:"Example Server 40", ip:"wss://example40.server"},
-    {name:"Example Server 41", ip:"wss://example41.server"},
-    {name:"Example Server 42", ip:"wss://example42.server"},
-    {name:"Example Server 43", ip:"wss://example43.server"},
-    {name:"Example Server 44", ip:"wss://example44.server"},
-    {name:"Example Server 45", ip:"wss://example45.server"},
-    {name:"Example Server 46", ip:"wss://example46.server"},
-    {name:"Example Server 47", ip:"wss://example47.server"},
-    {name:"Example Server 48", ip:"wss://example48.server"}
+    /* 48 NEW EXAMPLE SERVERS */
+    {name:"Example Server 1", ip:"wss://example1.eaglercraft.net"},
+    {name:"Example Server 2", ip:"wss://example2.eaglercraft.net"},
+    {name:"Example Server 3", ip:"wss://example3.eaglercraft.net"},
+    {name:"Example Server 4", ip:"wss://example4.eaglercraft.net"},
+    {name:"Example Server 5", ip:"wss://example5.eaglercraft.net"},
+    {name:"Example Server 6", ip:"wss://example6.eaglercraft.net"},
+    {name:"Example Server 7", ip:"wss://example7.eaglercraft.net"},
+    {name:"Example Server 8", ip:"wss://example8.eaglercraft.net"},
+    {name:"Example Server 9", ip:"wss://example9.eaglercraft.net"},
+    {name:"Example Server 10", ip:"wss://example10.eaglercraft.net"},
+    {name:"Example Server 11", ip:"wss://example11.eaglercraft.net"},
+    {name:"Example Server 12", ip:"wss://example12.eaglercraft.net"},
+    {name:"Example Server 13", ip:"wss://example13.eaglercraft.net"},
+    {name:"Example Server 14", ip:"wss://example14.eaglercraft.net"},
+    {name:"Example Server 15", ip:"wss://example15.eaglercraft.net"},
+    {name:"Example Server 16", ip:"wss://example16.eaglercraft.net"},
+    {name:"Example Server 17", ip:"wss://example17.eaglercraft.net"},
+    {name:"Example Server 18", ip:"wss://example18.eaglercraft.net"},
+    {name:"Example Server 19", ip:"wss://example19.eaglercraft.net"},
+    {name:"Example Server 20", ip:"wss://example20.eaglercraft.net"},
+    {name:"Example Server 21", ip:"wss://example21.eaglercraft.net"},
+    {name:"Example Server 22", ip:"wss://example22.eaglercraft.net"},
+    {name:"Example Server 23", ip:"wss://example23.eaglercraft.net"},
+    {name:"Example Server 24", ip:"wss://example24.eaglercraft.net"},
+    {name:"Example Server 25", ip:"wss://example25.eaglercraft.net"},
+    {name:"Example Server 26", ip:"wss://example26.eaglercraft.net"},
+    {name:"Example Server 27", ip:"wss://example27.eaglercraft.net"},
+    {name:"Example Server 28", ip:"wss://example28.eaglercraft.net"},
+    {name:"Example Server 29", ip:"wss://example29.eaglercraft.net"},
+    {name:"Example Server 30", ip:"wss://example30.eaglercraft.net"},
+    {name:"Example Server 31", ip:"wss://example31.eaglercraft.net"},
+    {name:"Example Server 32", ip:"wss://example32.eaglercraft.net"},
+    {name:"Example Server 33", ip:"wss://example33.eaglercraft.net"},
+    {name:"Example Server 34", ip:"wss://example34.eaglercraft.net"},
+    {name:"Example Server 35", ip:"wss://example35.eaglercraft.net"},
+    {name:"Example Server 36", ip:"wss://example36.eaglercraft.net"},
+    {name:"Example Server 37", ip:"wss://example37.eaglercraft.net"},
+    {name:"Example Server 38", ip:"wss://example38.eaglercraft.net"},
+    {name:"Example Server 39", ip:"wss://example39.eaglercraft.net"},
+    {name:"Example Server 40", ip:"wss://example40.eaglercraft.net"},
+    {name:"Example Server 41", ip:"wss://example41.eaglercraft.net"},
+    {name:"Example Server 42", ip:"wss://example42.eaglercraft.net"},
+    {name:"Example Server 43", ip:"wss://example43.eaglercraft.net"},
+    {name:"Example Server 44", ip:"wss://example44.eaglercraft.net"},
+    {name:"Example Server 45", ip:"wss://example45.eaglercraft.net"},
+    {name:"Example Server 46", ip:"wss://example46.eaglercraft.net"},
+    {name:"Example Server 47", ip:"wss://example47.eaglercraft.net"},
+    {name:"Example Server 48", ip:"wss://example48.eaglercraft.net"}
   ];
 
   const news=[
@@ -370,6 +367,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
     mainContent.innerHTML="";
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
+
+    // NEW: apply scroll only on servers section
+    if(id==="serversBtn"){
+      wrapper.classList.add("serverScroll");
+    }
+
     mainContent.appendChild(wrapper);
 
     if(id==="clientsBtn"){
@@ -382,10 +385,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
       wrapper.appendChild(launchBtn);
 
     } else if(id==="serversBtn"){
-      const scrollArea = document.createElement("div");
-      scrollArea.className = "serverListScroll";
-      wrapper.appendChild(scrollArea);
-
       servers.forEach(s=>{
         const box=document.createElement('div'); 
         box.className="serverBox";
@@ -396,7 +395,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
           <button>Copy</button>
         `;
         box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
-        scrollArea.appendChild(box);
+        wrapper.appendChild(box);
 
         checkServer(s.ip).then(on=>{
           const status = box.querySelector(".status");
