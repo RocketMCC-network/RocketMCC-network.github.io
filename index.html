@@ -114,7 +114,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 /* NEW: Scroll area fix */
 .serverScroll {
-  height: calc(100vh - 280px); /* FIXED */
+  height: calc(100vh - 280px);
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 10px;
@@ -357,7 +357,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
 
-    // NEW: apply scroll only on servers section
     if(id==="serversBtn"){
       wrapper.classList.add("serverScroll");
     }
@@ -429,13 +428,16 @@ function openModal(){
   const modal = document.getElementById('clientModal');
   const modalButtons = document.getElementById('modalButtons');
   modalButtons.innerHTML='';
+
   const clients=[
     {name:"Astra Client", url:"https://astraclient.com/play/wasm/18/"},
     {name:"Tuff Client", url:"https://tuff.speedslicer.dev/files/1_1UT12/WASM/"},
     {name:"Pixel Client", url:"https://example.com/pixel"},
     {name:"Resent Client", url:"https://elite4r.github.io/Resent-Client/"},
-    {name:"Shadow Client", url:"https://peytonplayz595.github.io/Shadow-4.0/javascript/"}
+    {name:"Shadow Client", url:"https://peytonplayz595.github.io/Shadow-4.0/javascript/"},
+    {name:"eagler-modpack-1.6.4 u1", url:"https://rocketmcc.github.io"}  
   ];
+
   clients.forEach(c=>{
     const btn=document.createElement('button');
     btn.textContent=c.name;
