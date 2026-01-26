@@ -43,13 +43,12 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   background: rgba(20,0,0,0.5);
   border:2px solid #ff0000;
   border-radius:10px;
-  padding:12px;
-  width:190px;
+  padding:20px;
+  width:220px;
   transition: all 0.3s ease;
   cursor:pointer;
   backdrop-filter: blur(5px);
   text-align:center;
-  font-size:14px;
 }
 .clientBox { color:#ff0000; }
 .clientBox:hover, .serverBox:hover, .newsBox:hover {
@@ -58,15 +57,8 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   transform: scale(1.05);
 }
 .clientBox button, .serverBox button, .newsBox button {
-  margin-top:8px;
-  padding:7px 12px;
-  border:none;
-  border-radius:5px;
-  background: rgba(255,0,0,0.8);
-  color:#fff;
-  cursor:pointer;
-  font-weight:bold;
-  font-size:13px;
+  margin-top:10px; padding:8px 15px; border:none; border-radius:5px;
+  background: rgba(255,0,0,0.8); color:#fff; cursor:pointer; font-weight:bold;
 }
 .clientBox button:hover, .serverBox button:hover, .newsBox button:hover { background: rgba(255,85,85,0.9); }
 
@@ -122,7 +114,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 /* NEW: Scroll area fix */
 .serverScroll {
-  height: calc(100vh - 240px);
+  height: calc(100vh - 280px); /* FIXED */
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 10px;
@@ -342,18 +334,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 34", ip:"wss://example34.eaglercraft.net"},
     {name:"Example Server 35", ip:"wss://example35.eaglercraft.net"},
     {name:"Example Server 36", ip:"wss://example36.eaglercraft.net"},
-    {name:"Example Server 37", ip:"wss://example37.eaglercraft.net"},
-    {name:"Example Server 38", ip:"wss://example38.eaglercraft.net"},
-    {name:"Example Server 39", ip:"wss://example39.eaglercraft.net"},
-    {name:"Example Server 40", ip:"wss://example40.eaglercraft.net"},
-    {name:"Example Server 41", ip:"wss://example41.eaglercraft.net"},
-    {name:"Example Server 42", ip:"wss://example42.eaglercraft.net"},
-    {name:"Example Server 43", ip:"wss://example43.eaglercraft.net"},
-    {name:"Example Server 44", ip:"wss://example44.eaglercraft.net"},
-    {name:"Example Server 45", ip:"wss://example45.eaglercraft.net"},
-    {name:"Example Server 46", ip:"wss://example46.eaglercraft.net"},
-    {name:"Example Server 47", ip:"wss://example47.eaglercraft.net"},
-    {name:"Example Server 48", ip:"wss://example48.eaglercraft.net"}
+    {name:"Example Server 37", ip:"wss://example37.eaglercraft.net"}
   ];
 
   const news=[
