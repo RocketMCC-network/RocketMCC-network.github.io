@@ -345,21 +345,21 @@ document.addEventListener("DOMContentLoaded", ()=>{
   ];
 
   sections.forEach(section=>{
-    section.addEventListener('click', ()=>{
-      sections.forEach(s=>s.classList.remove('active'));
-      section.classList.add('active');
-      if(section.id==="forumBtn"){ window.open("https://eaglercraftarchive.freeflarum.com","_blank"); return;}
-      loadSection(section.id);
-    });
+  section.addEventListener('click', ()=>{
+    sections.forEach(s=>s.classList.remove('active'));
+    section.classList.add('active');
+    if(section.id==="forumBtn"){ window.open("https://eaglercraftarchive.freeflarum.com","_blank"); return;}
+    loadSection(section.id);
   });
-  sections.forEach(section=>{
-    section.addEventListener('click', ()=>{
-      sections.forEach(s=>s.classList.remove('active'));
-      section.classList.add('active');
-      if(section.id==="discordBtn"){ window.open("https://discord.gg/rybNveXcgk","_blank"); return;}
-      loadSection(section.id);
-    });
+});
+sections.forEach(section=>{
+  section.addEventListener('click', ()=>{
+    sections.forEach(s=>s.classList.remove('active'));
+    section.classList.add('active');
+    if(section.id==="discordBtn"){ window.open("https://discord.gg/rybNveXcgk","_blank"); return;}
+    loadSection(section.id);
   });
+});
 
   function loadSection(id){
     mainContent.innerHTML="";
