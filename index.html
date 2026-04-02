@@ -142,6 +142,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
     <div class="section active" id="clientsBtn">Clients</div>
     <div class="section" id="serversBtn">Servers</div>
     <div class="section" id="forumBtn">Forum</div>
+    <div class="section" id="discordBtn">Discord</div>
     <div class="section" id="newsBtn">News</div>
     <div class="section" id="partnersBtn">Partners</div>
   </div>
@@ -348,6 +349,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
       sections.forEach(s=>s.classList.remove('active'));
       section.classList.add('active');
       if(section.id==="forumBtn"){ window.open("https://eaglercraftarchive.freeflarum.com","_blank"); return;}
+      loadSection(section.id);
+    });
+  });
+  sections.forEach(section=>{
+    section.addEventListener('click', ()=>{
+      sections.forEach(s=>s.classList.remove('active'));
+      section.classList.add('active');
+      if(section.id==="discordBtn"){ window.open("https://discord.gg/rybNveXcgk","_blank"); return;}
       loadSection(section.id);
     });
   });
