@@ -78,7 +78,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   border-radius:5px; background:#ff0000; color:#fff; cursor:pointer;
 }
 
-
+/* online counter glow */
 #onlineCounter, #onlineCount {
   color: #ff0000;
   text-shadow:
@@ -112,7 +112,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   }
 }
 
-/* NEW: Scroll area fix */
+/* scoll down code */
 .serverScroll {
   height: calc(100vh - 280px);
   overflow-y: auto;
@@ -281,7 +281,7 @@ function checkServer(wss, timeout=3000){
   });
 }
 
-/* -------------------- MAIN CONTENT -------------------- */
+/* -------------------- SERVERS -------------------- */
 document.addEventListener("DOMContentLoaded", ()=>{
   const sections = document.querySelectorAll('.section');
   const mainContent = document.getElementById('mainContent');
@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 36", ip:"wss://example36.eaglercraft.net"},
     {name:"Example Server 37", ip:"wss://example37.eaglercraft.net"}
   ];
-
+/* -------------------- MAIN CONTENT -------------------- */
   const news=[
     {title:"RocketMCC-Network server shutdown", text:"shutdown"},
     {title:"Clients Updated", text:"Tuff and Astra updated to WASM."},
@@ -434,7 +434,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   loadSection("clientsBtn");
 });
 
-/* -------------------- MODAL -------------------- */
+
 function openModal(){
   const modal = document.getElementById('clientModal');
   const modalButtons = document.getElementById('modalButtons');
@@ -462,7 +462,7 @@ function openModal(){
 function closeModal(){ document.getElementById('clientModal').style.display='none'; }
 </script>
 
-<!-- 🔴 FIREBASE LIVE COUNTER -->
+<!-- FIREBASE LIVE COUNTER -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
