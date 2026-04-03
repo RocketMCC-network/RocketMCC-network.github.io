@@ -137,7 +137,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   <div id="onlineCounter" style="margin-bottom:20px; font-size:18px;">
     Online users: <span id="onlineCount">0</span>
   </div>
-
+  
   <div class="sections">
     <div class="section active" id="clientsBtn">Clients</div>
     <div class="section" id="serversBtn">Servers</div>
@@ -145,6 +145,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
     <div class="section" id="discordBtn">Discord</div>
     <div class="section" id="newsBtn">News</div>
     <div class="section" id="partnersBtn">Partners</div>
+    <div class="section" id="relayserversBtn">Relay Servers</div>
   </div>
 
   <div id="mainContent"></div>
@@ -337,6 +338,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Example Server 36", ip:"wss://example36.eaglercraft.net"},
     {name:"Example Server 37", ip:"wss://example37.eaglercraft.net"}
   ];
+  const relayServers = [
+  {name:"Relay 1", ip:"wss://relay1.example.com"},
+  {name:"Relay 2", ip:"wss://relay2.example.com"}
+];
 /* -------------------- MAIN CONTENT -------------------- */
   const news=[
     {title:"RocketMCC-Network server shutdown", text:"shutdown"},
@@ -385,6 +390,25 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     } else if(id==="serversBtn"){
       servers.forEach(s=>{
+        const box=document.createElement('div');
+        box.className="serverBox";
+        box.innerHTML = `
+          <div>${s.name}</div>
+          <div>${s.ip}</div>
+          <div class="status">Checking...</div>
+          <button>Copy</button>
+        `;
+        box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
+        wrapper.appendChild(box);
+
+        checkServer(s.ip).then(on=>{
+          const status = box.querySelector(".status");
+          status.textContent = on ? "ONLINE" : "OFFLINE";
+          status.style.color = on ? "#00ff00" : "#ff3333";
+        });
+      });
+     } else if(id==="relayserversBtn"){
+  relayServers.forEach(s=>{
         const box=document.createElement('div');
         box.className="serverBox";
         box.innerHTML = `
