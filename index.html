@@ -11,7 +11,15 @@
             background-color: #000000;
             margin: 0;
             font-family: Arial, sans-serif;
+            .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
         }
+            .logo {
+    width: 200px;
+    margin-bottom: 20px;
+    }
         .loader {            
 border: 5px solid #8A0101;
             border-top: 5px solid #BF0404;
@@ -28,7 +36,10 @@ border: 5px solid #8A0101;
 </head>
 <body>
     <div class="loader"></div>
-
+    <div class="container">
+    <img src="logo.png" alt="RocketMCC Logo" class="logo">
+    <div class="loader"></div>
+</div>
     <script>
         window.onload = function() {
             setTimeout(function() {
