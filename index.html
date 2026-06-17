@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading...</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .loader {
+<img src="logo.png" width="200" height="200" alt="RocketMCC Logo" class="site-logo">            
+border: 5px solid #8A0101;
+            border-top: 5px solid #BF0404;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.location.href = "main.html";
+            }, 10000);
+        };
+    </script>
+</body>
+</html>   
