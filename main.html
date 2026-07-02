@@ -272,7 +272,7 @@ window.addEventListener('resize', ()=>{
 });
 
 
-function checkserver(wss, timeout=3000){
+function checkServer(wss, timeout=3000){
   return new Promise(resolve=>{
     let ws;
     try { ws=new WebSocket(wss); }
@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {name:"Dumbshit Survival X", ip:"wss://mc.dssx.uk"},
     {name:"placeholder", ip:"wss://placeholder.net"},
   ];
-  const relayservers = [
+  const relayServers = [
   {name:"Lax1dude's shared world relay #2", ip:"wss://relay.lax1dude.net/"},
   {name:"Lax1dude's shared world relay #1", ip:"wss://relay.deev.is/"},
   {name:"Eagler Public Relay", ip:"wss://relay.shhnowisnottheti.me/"},
@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 });
 
-  function Loadsection(id){
+  function LoadSection(id){
     mainContent.innerHTML="";
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     mainContent.appendChild(wrapper);
 
     if(id==="clientsbtn"){
-      const launchbtn = document.createElement('div');
+      const launchBtn = document.createElement('div');
       launchBtn.className='clientBox';
       launchBtn.innerHTML = `
         <div>Launch eaglercraft Client</div>
