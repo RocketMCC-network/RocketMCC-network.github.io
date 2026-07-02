@@ -161,7 +161,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 <script>
 
-function launchClient(url){
+function launchclient(url){
   const win=window.open('about:blank','_blank','width=800,height=600');
   win.document.write(`
     <html>
@@ -272,7 +272,7 @@ window.addEventListener('resize', ()=>{
 });
 
 
-function checkServer(wss, timeout=3000){
+function checkserver(wss, timeout=3000){
   return new Promise(resolve=>{
     let ws;
     try { ws=new WebSocket(wss); }
@@ -286,7 +286,7 @@ function checkServer(wss, timeout=3000){
 
 document.addEventListener("DOMContentLoaded", ()=>{
   const sections = document.querySelectorAll('.section');
-  const mainContent = document.getElementById('mainContent');
+  const maincontent = document.getElementById('maincontent');
 
   const servers=[
     {name:"SkeletonMC", ip:"wss://eagler.skeletonmc.com"},
@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 });
 
-  function loadSection(id){
+  function loadsection(id){
     mainContent.innerHTML="";
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
