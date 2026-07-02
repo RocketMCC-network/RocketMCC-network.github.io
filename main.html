@@ -139,13 +139,13 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   </div>
   
   <div class="sections">
-    <div class="section active" id="clientsBtn">Clients</div>
-    <div class="section" id="serversBtn">Servers</div>
-    <div class="section" id="forumBtn">Forum</div>
-    <div class="section" id="discordBtn">Discord</div>
-    <div class="section" id="newsBtn">News</div>
-    <div class="section" id="partnersBtn">Partners</div>
-    <div class="section" id="relayserversBtn">Relay Servers</div>
+    <div class="section active" id="clientsbtn">clients</div>
+    <div class="section" id="serversBtn">servers</div>
+    <div class="section" id="forum">forum</div>
+    <div class="section" id="discord">Discord</div>
+    <div class="section" id="newsBtn">news</div>
+    <div class="section" id="partnersBtn">partners</div>
+    <div class="section" id="relayserversBtn">relay Servers</div>
   </div>
 
   <div id="mainContent"></div>
@@ -153,7 +153,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
 
 <div id="clientModal">
   <div id="clientModalContent">
-    <h2>Select Client</h2>
+    <h2>eaglercraft clients</h2>
     <div id="modalButtons"></div>
     <button class="closeBtn" onclick="closeModal()">Close</button>
   </div>
@@ -168,7 +168,7 @@ function launchClient(url){
       <head><title>RocketMCC</title></head>
       <img src="logo.png" width="200" height="200" alt="RocketMCC Logo" class="site-logo">
       <body style="background:#0d0d0d;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial;font-size:24px;">
-        Loading client...
+        Loading eaglercraft client...
         <script>
           setTimeout(()=>{ window.location.href="${url}"; }, 500);
         <\/script>
@@ -339,12 +339,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
     sections.forEach(s=>s.classList.remove('active'));
     section.classList.add('active');
 
-    if(section.id==="forumBtn"){
+    if(section.id==="forum"){
       window.open("https://eaglercraftarchive.freeflarum.com","_blank");
       return;
     }
 
-    if(section.id==="discordBtn"){
+    if(section.id==="discord"){
       window.open("https://discord.gg/rybNveXcgk","_blank");
       return;
     }
@@ -364,11 +364,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     mainContent.appendChild(wrapper);
 
-    if(id==="clientsBtn"){
+    if(id==="clientsbtn"){
       const launchBtn = document.createElement('div');
       launchBtn.className='clientBox';
       launchBtn.innerHTML = `
-        <div>Launch Client</div>
+        <div>Launch eaglercraft Client</div>
         <button onclick="openModal()">Open</button>
       `;
       wrapper.appendChild(launchBtn);
@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
           <div>${s.name}</div>
           <div>${s.ip}</div>
           <div class="status">Checking...</div>
-          <button>Copy</button>
+          <button>Copy ip</button>
         `;
         box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
         wrapper.appendChild(box);
@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
           <div>${s.name}</div>
           <div>${s.ip}</div>
           <div class="status">Checking...</div>
-          <button>Copy</button>
+          <button>Copy ip</button>
         `;
         box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
         wrapper.appendChild(box);
