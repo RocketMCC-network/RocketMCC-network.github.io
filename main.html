@@ -139,13 +139,13 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   </div>
   
   <div class="sections">
-    <div class="section active" id="clientsBtn">Clients</div>
-    <div class="section" id="serversBtn">Servers</div>
-    <div class="section" id="forumBtn">Forum</div>
-    <div class="section" id="discordBtn">Discord</div>
-    <div class="section" id="newsBtn">News</div>
-    <div class="section" id="partnersBtn">Partners</div>
-    <div class="section" id="relayserversBtn">Relay Servers</div>
+    <div class="section active" id="clients">Clients</div>
+    <div class="section" id="servers">Servers</div>
+    <div class="section" id="forum">Forum</div>
+    <div class="section" id="discord">Discord</div>
+    <div class="section" id="news">News</div>
+    <div class="section" id="partners">Partners</div>
+    <div class="section" id="relayservers">Relay Servers</div>
   </div>
 
   <div id="mainContent"></div>
@@ -339,12 +339,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
     sections.forEach(s=>s.classList.remove('active'));
     section.classList.add('active');
 
-    if(section.id==="forumBtn"){
+    if(section.id==="forum"){
       window.open("https://eaglercraftarchive.freeflarum.com","_blank");
       return;
     }
 
-    if(section.id==="discordBtn"){
+    if(section.id==="discord"){
       window.open("https://discord.gg/rybNveXcgk","_blank");
       return;
     }
@@ -358,13 +358,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
 
-    if(id==="serversBtn"){
+    if(id==="servers"){
       wrapper.classList.add("serverScroll");
     }
 
     mainContent.appendChild(wrapper);
 
-    if(id==="clientsBtn"){
+    if(id==="clients"){
       const launchBtn = document.createElement('div');
       launchBtn.className='clientBox';
       launchBtn.innerHTML = `
@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       `;
       wrapper.appendChild(launchBtn);
 
-    } else if(id==="serversBtn"){
+    } else if(id==="servers"){
       servers.forEach(s=>{
         const box=document.createElement('div');
         box.className="serverBox";
@@ -392,7 +392,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
           status.style.color = on ? "#00ff00" : "#ff3333";
         });
       });
-     } else if(id==="relayserversBtn"){
+     } else if(id==="relayservers"){
   relayServers.forEach(s=>{
         const box=document.createElement('div');
         box.className="serverBox";
@@ -412,14 +412,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
         });
       });
 
-    } else if(id==="newsBtn"){
+    } else if(id==="news"){
       news.forEach(n=>{
         const box=document.createElement('div'); box.className="newsBox";
         box.innerHTML=`<h3>${n.title}</h3><p>${n.text}</p>`;
         wrapper.appendChild(box);
       });
 
-    } else if(id==="partnersBtn"){
+    } else if(id==="partners"){
       const partners = [
         {name:"Eaglerforum", url:"https://eaglerforum.com/", logo:""},
         {name:"minecraft194eaglercraft", url:"https://minecraft194eaglercraft.weebly.com", logo:""},
@@ -440,7 +440,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   }
 
-  loadSection("clientsBtn");
+  loadSection("clients");
 });
 
 
@@ -461,7 +461,7 @@ function openModal(){
     {name:"Aura ClientBeta", url:"AuraClientBeta.html"},
     {name:"Aero Client", url:"AeroClient.html"},
     {name:"MyvenClient", url:"MyvenClient.html"},
-    {name:"VoltanClient", url:"VoltanClient.html"},
+    {name:"Voltan Client", url:"VoltanClient.html"},
   ];
 
   clients.forEach(c=>{
