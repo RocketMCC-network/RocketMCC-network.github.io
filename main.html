@@ -141,7 +141,6 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   <div class="sections">
     <div class="section active" id="clients">Clients</div>
     <div class="section" id="servers">Servers</div>
-    <div class="section" id="forum">Forum</div>
     <div class="section" id="discord">Discord</div>
     <div class="section" id="news">News</div>
     <div class="section" id="partners">Partners</div>
@@ -339,10 +338,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     sections.forEach(s=>s.classList.remove('active'));
     section.classList.add('active');
 
-    if(section.id==="forum"){
-      window.open("https://eaglercraftarchive.freeflarum.com","_blank");
-      return;
-    }
+
 
     if(section.id==="discord"){
       window.open("https://discord.gg/rybNveXcgk","_blank");
