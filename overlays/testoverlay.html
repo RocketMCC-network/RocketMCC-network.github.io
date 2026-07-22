@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
 
     <style>
-        #overlay {
+        
+        overlay {
             position: fixed;
             top: 10px;
             left: 10px;
@@ -17,12 +18,31 @@
             pointer-events: none;
             z-index: 9999;
 
-            /* Hidden by default */
+            
             display: none;
         }
 
         .stat {
             margin: 2px 0;
+        }
+
+        
+        toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.7);
+            color: #A82008;
+            border: 1px solid #A82008;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-family: monospace;
+            cursor: pointer;
+        }
+
+        toggle:hover {
+            background: rgba(30, 30, 30, 0.9);
         }
 
         iframe {
@@ -34,11 +54,16 @@
 </head>
 <body>
 
+    
     <div id="overlay">
         <div class="stat">FPS: <span id="fps">0</span></div>
         <div class="stat">RAM: <span id="ram">0</span> MB</div>
     </div>
 
+    
+    <button id="toggle">Show Stats</button>
+
+    
     <iframe
         src="https://example.com"
         allowfullscreen
@@ -48,17 +73,18 @@
 
     <script>
         const overlay = document.getElementById('overlay');
+        const toggle = document.getElementById('toggleBtn');
         const fpsEl = document.getElementById('fps');
         const ramEl = document.getElementById('ram');
 
         let overlayEnabled = false;
 
-        // Toggle overlay when Ctrl is pressed
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "CTRL" && !event.repeat) {
-                overlayEnabled = !overlayEnabled;
-                overlay.style.display = overlayEnabled ? "block" : "none";
-            }
+       
+        toggle.addEventListener('click', () => {
+            overlayEnabled = !overlayEnabled;
+
+            overlay.style.display = overlayEnabled ? 'block' : 'none';
+            toggleBtn.textContent = overlayEnabled ? 'Hide Stats' : 'Show Stats';
         });
 
         let frames = 0;
@@ -76,10 +102,12 @@
                 }
 
                 if (performance.memory) {
-                    const usedMB = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                    const usedMB = (
+                        performance.memory.usedJSHeapSize / 1024 / 1024
+                    ).toFixed(2);
                     ramEl.textContent = usedMB;
                 } else {
-                    ramEl.textContent = "N/A (Firefox/Safari)";
+                    ramEl.textContent = "N/A";
                 }
             }
 
