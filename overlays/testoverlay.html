@@ -5,7 +5,7 @@
 
     <style>
         
-        overlay {
+        #overlay {
             position: fixed;
             top: 10px;
             left: 10px;
@@ -17,8 +17,6 @@
             border-radius: 5px;
             pointer-events: none;
             z-index: 9999;
-
-            
             display: none;
         }
 
@@ -27,7 +25,7 @@
         }
 
         
-        toggle {
+        #toggle {
             position: fixed;
             top: 10px;
             right: 10px;
@@ -41,7 +39,7 @@
             cursor: pointer;
         }
 
-        toggle:hover {
+        #toggle:hover {
             background: rgba(30, 30, 30, 0.9);
         }
 
@@ -65,7 +63,7 @@
 
     
     <iframe
-        src="https://example.com"
+        src="rocketmcc-network.github.io/clients/astra/astra.html"
         allowfullscreen
         frameborder="0"
         referrerpolicy="strict-origin-when-cross-origin">
@@ -73,18 +71,18 @@
 
     <script>
         const overlay = document.getElementById('overlay');
-        const toggle = document.getElementById('toggleBtn');
+        const toggle = document.getElementById('toggle');
         const fpsEl = document.getElementById('fps');
         const ramEl = document.getElementById('ram');
 
         let overlayEnabled = false;
 
-       
+        
         toggle.addEventListener('click', () => {
             overlayEnabled = !overlayEnabled;
 
             overlay.style.display = overlayEnabled ? 'block' : 'none';
-            toggleBtn.textContent = overlayEnabled ? 'Hide Stats' : 'Show Stats';
+            toggle.textContent = overlayEnabled ? 'Hide Stats' : 'Show Stats';
         });
 
         let frames = 0;
@@ -102,10 +100,9 @@
                 }
 
                 if (performance.memory) {
-                    const usedMB = (
+                    ramEl.textContent = (
                         performance.memory.usedJSHeapSize / 1024 / 1024
                     ).toFixed(2);
-                    ramEl.textContent = usedMB;
                 } else {
                     ramEl.textContent = "N/A";
                 }
