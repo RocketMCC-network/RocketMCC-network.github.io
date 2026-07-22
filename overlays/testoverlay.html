@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
 
     <style>
-      
         #overlay {
             position: fixed;
             top: 10px;
@@ -17,6 +16,9 @@
             border-radius: 5px;
             pointer-events: none;
             z-index: 9999;
+
+            /* Hidden by default */
+            display: none;
         }
 
         .stat {
@@ -32,13 +34,11 @@
 </head>
 <body>
 
-    
     <div id="overlay">
         <div class="stat">FPS: <span id="fps">0</span></div>
         <div class="stat">RAM: <span id="ram">0</span> MB</div>
     </div>
 
-    
     <iframe
         src="https://example.com"
         allowfullscreen
@@ -47,29 +47,40 @@
     </iframe>
 
     <script>
+        const overlay = document.getElementById('overlay');
         const fpsEl = document.getElementById('fps');
         const ramEl = document.getElementById('ram');
 
-        let lastTime = performance.now();
+        let overlayEnabled = false;
+
+        // Toggle overlay when Ctrl is pressed
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "CTRL" && !event.repeat) {
+                overlayEnabled = !overlayEnabled;
+                overlay.style.display = overlayEnabled ? "block" : "none";
+            }
+        });
+
         let frames = 0;
-        let lastFpsUpdate = 0;
+        let lastFpsUpdate = performance.now();
 
         function updateOverlay(now) {
-            lastTime = now;
             frames++;
 
-            if (now - lastFpsUpdate >= 500) {
-                const fps = Math.round((frames * 1000) / (now - lastFpsUpdate));
-                fpsEl.textContent = fps;
-                frames = 0;
-                lastFpsUpdate = now;
-            }
+            if (overlayEnabled) {
+                if (now - lastFpsUpdate >= 500) {
+                    const fps = Math.round((frames * 1000) / (now - lastFpsUpdate));
+                    fpsEl.textContent = fps;
+                    frames = 0;
+                    lastFpsUpdate = now;
+                }
 
-            if (performance.memory) {
-                const usedMB = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
-                ramEl.textContent = usedMB;
-            } else {
-                ramEl.textContent = "N/A (Firefox/Safari)";
+                if (performance.memory) {
+                    const usedMB = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                    ramEl.textContent = usedMB;
+                } else {
+                    ramEl.textContent = "N/A (Firefox/Safari)";
+                }
             }
 
             requestAnimationFrame(updateOverlay);
