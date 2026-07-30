@@ -140,7 +140,6 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
   
   <div class="sections">
     <div class="section active" id="clients">Clients</div>
-    <div class="section" id="servers">Servers</div>
     <div class="section" id="discord">Discord</div>
     <div class="section" id="news">News</div>
     <div class="section" id="partners">Partners</div>
@@ -286,39 +285,6 @@ function checkServer(wss, timeout=3000){
 document.addEventListener("DOMContentLoaded", ()=>{
   const sections = document.querySelectorAll('.section');
   const mainContent = document.getElementById('mainContent');
-
-  const servers=[
-    {name:"SkeletonMC", ip:"wss://eagler.skeletonmc.com"},
-    {name:"Hyper Network", ip:"wss://eag.hyper-network.net"},
-    {name:"WebMC", ip:"wss://play.webmc.fun"},
-    {name:"Jonarchy", ip:"wss://8b4t.org"},
-    {name:"Radiant Network", ip:"wss://eagler.radiantnet.store"},
-    {name:"NexoX", ip:"wss://nexo-app.net"},
-    {name:"AdderallMC", ip:"wss://adderall.ir"},
-    {name:"VanillaMC", ip:"wss://vanillamc.org"},
-    {name:"VoidsentMC", ip:"wss://mc.voidsent.net"},
-    {name:"Lamp Network", ip:"wss://mc.lamplifesteal.xyz"},
-    {name:"ExoticMC", ip:"wss://el.exoticmc.xyz"},
-    {name:"ArchMC", ip:"wss://mc.arch.lol"},
-    {name:"VanillaMC", ip:"wss://vanillamc.me"},
-    {name:"Rice Network x BallCraft", ip:"wss://mc.ricenetwork.xyz"},
-    {name:"Clever-Teaching", ip:"wss://clever-teaching.com"},
-    {name:"Aeon-Network", ip:"wss://aeon-network.net"},
-    {name:"Shadow-Network", ip:"wss://play.shadownetwork.shop"},
-    {name:"ArchyverseV", ip:"wss://mc.archyverse.org"},
-    {name:"Pixel Craft", ip:"wss://pcsmp.net"},
-    {name:"xenaMC", ip:"wss://xena.wtf"},
-    {name:"CarrotCraft Network", ip:"wss://eagler.carrot-craft.org"},
-    {name:"HeartSMP", ip:"wss://play.heartsmp.net"},
-    {name:"WanderwoodSMP", ip:"wss://wanderwoodsmp.com"},
-    {name:"Cracked PvP", ip:"wss://crackedpvp.club"},
-    {name:"NexoMC", ip:"wss://nexomc.org"},
-    {name:"TuffNET", ip:"wss://tuff.ws"},
-    {name:"DylanMC", ip:"wss://play.monacoeducation.info"},
-    {name:"SealCraft", ip:"wss://mc.sealcentral.co"},
-    {name:"ElysiumNetwork", ip:"wss://web.elysiumnet.xyz"},
-    {name:"Dumbshit Survival X", ip:"wss://mc.dssx.uk"},
-    {name:"placeholder", ip:"wss://placeholder.net"},
   ];
   const relayServers = [
   {name:"Lax1dude's shared world relay #2", ip:"wss://relay.lax1dude.net/"},
@@ -354,10 +320,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const wrapper = document.createElement("div");
     wrapper.className = "listWrapper";
 
-    if(id==="servers"){
-      wrapper.classList.add("serverScroll");
-    }
-
+    
     mainContent.appendChild(wrapper);
 
     if(id==="clients"){
@@ -369,25 +332,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       `;
       wrapper.appendChild(launchBtn);
 
-    } else if(id==="servers"){
-      servers.forEach(s=>{
-        const box=document.createElement('div');
-        box.className="serverBox";
-        box.innerHTML = `
-          <div>${s.name}</div>
-          <div>${s.ip}</div>
-          <div class="status">Checking...</div>
-          <button>Copy</button>
-        `;
-        box.querySelector("button").addEventListener("click",()=>navigator.clipboard.writeText(s.ip));
-        wrapper.appendChild(box);
-
-        checkServer(s.ip).then(on=>{
-          const status = box.querySelector(".status");
-          status.textContent = on ? "ONLINE" : "OFFLINE";
-          status.style.color = on ? "#00ff00" : "#ff3333";
-        });
-      });
+    
      } else if(id==="relayservers"){
   relayServers.forEach(s=>{
         const box=document.createElement('div');
