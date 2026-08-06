@@ -135,6 +135,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
     <div class="section" id="partners">Partners</div>
     <div class="section" id="relayservers">Relay Servers</div>
     <div class="section" id="eaglerpannel">EaglerNodes</div>
+    <div class="section" id="TermsofService">Terms of Service</div>
   </div>
 
   <div id="mainContent"></div>
@@ -290,6 +291,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
     {title:"added Shadow Client", text:"added shadow client"}
   ];
 
+  const  TermsofService=[
+    {title:"About Us",text:"We eaglercraft are not affiliated with Minecraft.net, Mojang, or Microsoft.You are allowed to copy this website as long as you give credit"},
+    {title:"Privacy Policy",text:"We use firebaseio only for tracking live player counts.We require Javascript to be able to use the website."},
+  ];
+
   sections.forEach(section=>{
   section.addEventListener('click', ()=>{
     sections.forEach(s=>s.classList.remove('active'));
@@ -352,6 +358,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
         wrapper.appendChild(box);
       });
 
+      } else if(id==="TermsofService"){
+      TermsofService.forEach(n=>{
+        const box=document.createElement('div'); box.className="news";
+        box.innerHTML=`<h3>${n.title}</h3><p>${n.text}</p>`;
+        wrapper.appendChild(box);
+      });
+      
     } else if(id==="partners"){
       const partners = [
         {name:"Eaglerforum", url:"https://eaglerforum.com/", logo:""},
