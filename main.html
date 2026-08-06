@@ -294,7 +294,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     sections.forEach(s=>s.classList.remove('active'));
     section.classList.add('active');
 
-
+    if(section.id==="forumBtn"){
+      window.open("https://eaglercraftarchive.freeflarum.com","_blank");
+      return;
+    }
 
     if(section.id==="discord"){
       window.open("https://discord.gg/rybNveXcgk","_blank");
