@@ -134,6 +134,7 @@ h1 { color:#ff0000; font-size:48px; margin-bottom:30px; }
     <div class="section" id="news">News</div>
     <div class="section" id="partners">Partners</div>
     <div class="section" id="relayservers">Relay Servers</div>
+    <div class="section" id="eaglerpannel">EaglerNodes</div>
   </div>
 
   <div id="mainContent"></div>
@@ -294,8 +295,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     sections.forEach(s=>s.classList.remove('active'));
     section.classList.add('active');
 
-    if(section.id==="forumBtn"){
-      window.open("https://eaglercraftarchive.freeflarum.com","_blank");
+    if(section.id==="eaglerpannel"){
+      window.open("https://panel.eagler.cc/register?ref=1aPeHHzB","_blank");
       return;
     }
 
